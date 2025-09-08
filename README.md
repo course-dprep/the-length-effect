@@ -9,10 +9,6 @@
 
 *Describe the purpose of this project* 
 
-
-The influence of movie duration on audience raitings, contralling for release year
-
-
 ## Motivation
 
 *Provide background/motivation for your project*
