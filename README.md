@@ -8,6 +8,7 @@
 # The influence of movie duration on audience raitings, contralling for release year
 
 *Describe the purpose of this project* 
+Let's wait for description 
 
 ## Motivation
 
