@@ -7,8 +7,7 @@
 
 # Title of your Project
 *Describe the purpose of this project* 
-
-Title of the movie 
+The influence of movie duration on audience raitings, contralling for release year
 
 ## Motivation
 
