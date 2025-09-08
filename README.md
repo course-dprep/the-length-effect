@@ -5,12 +5,10 @@
 > Feel free to delete this text.
 
 
-# The influence of movie duration on audience raitings, contralling for release year
-
+# Title of your Project
 *Describe the purpose of this project* 
-test123 
 
-testing with terminal 
+bla bla bla 
 
 The influence of movie duration on audience raitings, contralling for release year
 
