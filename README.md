@@ -5,9 +5,7 @@
 > Feel free to delete this text.
 
 
-# The influence of movie duration on audience raitings, contralling for release year Team 4
-
-
+# The influence of movie duration on audience raitings, controling for release year Team 4
 *Describe the purpose of this project* 
 Let's wait for description 
 
