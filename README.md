@@ -10,6 +10,8 @@
 *Describe the purpose of this project* 
 test123 
 
+testing with terminal 
+
 The influence of movie duration on audience raitings, contralling for release year
 
 
