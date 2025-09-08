@@ -8,8 +8,14 @@
 # Title of your Project
 *Describe the purpose of this project* 
 
+<<<<<<< HEAD
 eThe influence of movie duration on audience raitings, contralling for release year
 
+=======
+
+
+hey this is a test line.
+>>>>>>> c3cbbff0f963d8b6b51d0be7eb8c4f76970ecf3e
 ## Motivation
 
 *Provide background/motivation for your project*
