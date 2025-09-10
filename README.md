@@ -10,6 +10,7 @@
 
 ## Motivation
 
+In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of individual ratings (Wallace et al., 1993).
 *Provide background/motivation for your project*
 
 **Mention your research question**
