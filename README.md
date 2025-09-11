@@ -1,4 +1,4 @@
-> **Important:** This is a template repository to help you set up your team project.  
+ **Important:** This is a template repository to help you set up your team project.  
 >  
 > You are free to modify it based on your needs. For example, if your data is downloaded using *multiple* scripts instead of a single one (as shown in `\data\`), structure the code accordingly. The same applies to all other starter files—adapt or remove them as needed.  
 >  
@@ -32,8 +32,7 @@ After merging, cleaning, and aggregating, the datasets consists of 301,411 obser
 
 ## Method
 
-- What methods do you use to answer your research question?
-- Provide justification for why it is the most suitable. 
+We estimate a linear regression (OLS) of average_rating on runtime_minutes, including start_year as a control. OLS is appropriate because the outcome is a continuous 0–10 mean rating, and we seek the average marginal effect of runtime. With our large sample, OLS delivers stable, easily interpretable coefficients in rating points per minute; we report HC3 robust standard errors to guard against heteroskedasticity and optionally include a quadratic term for runtime to allow non-linearity. The coefficient on runtime (or the derivative in the quadratic model) gives the expected change in rating for a one-minute increase holding release year constant, which directly answers our research question.
 
 ## Preview of Findings 
 - Describe the gist of your findings (save the details for the final paper!)
