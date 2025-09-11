@@ -250,6 +250,7 @@ tail(runtime_summary_dt)
 
 
 ```{r}
+library(stringr)
 movies_enriched <- movies_final %>%
   mutate (
     title_clean  = str_squish(str_remove(title, "\\s*\\((TV|Video|V)\\)$")),
