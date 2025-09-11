@@ -16,10 +16,10 @@ In evaluating audience reception of films, factors such as actor performance, ge
 **Mention your research question**
 
 ## Data
+In this study, we use publicly available IMDb datasets: title.basics, containing metadata about movie titles (including release year and duration), and title.ratings, containing aggregate user ratings. The datasets are retrieved in TSV format from the IMDb website and merged using tconst. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year).
+After merging, cleaning, and aggregating, the datasets consists of 301,411 observations. This reduction in the number of observations is due to the process of merging and cleaning the data. In particular, missing values were removed, films with unrealistic durations (0 minutes or longer than 300 minutes) were excluded, and films listed as released in 2026 (which probably do not yet have complete ratings) were omitted.
 
-- What dataset(s) did you use? How was it obtained?
-- How many observations are there in the final dataset? 
-- Include a table of variable description/operstionalisation. 
+
 
 ## Method
 
