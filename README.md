@@ -20,7 +20,7 @@ This research addresses an underexplored dimension of firm evaluation. While pre
 
 From a managerial perspective, the findings are of direct relevance to industry stakeholders such as producers, streaming platforms, and distributors. For film producers and studios, the movie duration represents a strategic decision during production and editing that can influence both critical reception and audience satisfaction (Choudhary et al., 2024). Therefore, insights into its relationship with ratings can inform editing choices, guiding whether extended narratives enhance perceived quality or whether more concise formats maximize enjoyment. For streaming platforms, understanding the effect of runtime on ratings has implications for content acquisition, recommendation algorithms, and user engagement strategies. Similarly, distributors and marketers can benefit from these insights by tailoring campaigns to frame the movie duration as a unique value proposition, positioning longer films as immersive experiences or shorter films as convenient and accessible entertainment.
 
-<b><u>Research Question</u></b>
+**Research Question**
 
 **To what extent does movie duration influence audience ratings, controlling for release year?**
 
