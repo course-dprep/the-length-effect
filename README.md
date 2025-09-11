@@ -1,16 +1,13 @@
- **Important:** This is a template repository to help you set up your team project.  
->  
-> You are free to modify it based on your needs. For example, if your data is downloaded using *multiple* scripts instead of a single one (as shown in `\data\`), structure the code accordingly. The same applies to all other starter files—adapt or remove them as needed.  
->  
-> Feel free to delete this text.
-
-
-# The influence of movie duration on audience raitings, controling for release year
-*Describe the purpose of this project* 
+# Introduction
+The purpose of this project is to examine whether and how movie length influences audience ratings, while controlling for release year. We aim to test if longer films are consistently perceived as higher quality or if extended runtimes risk diminishing audience engagement. By focusing directly on runtime rather than treating it as a side factor, we seek to establish a clear relationship between film length and ratings. This will allow us to identify whether there is an optimal duration for films and to understand how this relationship may have shifted over time.
 
 ## Motivation
 
-In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of individual ratings (Wallace et al., 1993).
+In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of individual ratings (Wallace et al., 1993). Runtime, frequently included as a control variable in prior research, also carries meaningful implications for audience perception (Ashari et al., 2022). A longer duration of the movie often reflects higher production value and suggests a narrative depth that justifies viewers’ time investment. However, excessive runtime may adversely affect enjoyment due to decreased audience attention and potential fatigue. 
+
+Empirical evidence on the relationship between movie duration and audience ratings remains inconclusive. Some studies identify a positive association, whereas others report a non-linear or genre specific effect. To address this gap, the current study investigates the influence of movie duration on audience ratings. 
+
+Given that rating behaviour and audience preferences evolve over time (Amendola et al., 2015), we incorporate release year as a control variable to enhance the internal validity of our analysis and account for temporal dynamics in consumer behaviour. 
 
 *Academic relevance*
 
@@ -27,7 +24,8 @@ From a managerial perspective, the findings are of direct relevance to industry 
 ## Data
 In this study, we use publicly available IMDb datasets: title.basics, containing metadata about movie titles (including release year and duration), and title.ratings, containing aggregate user ratings. The datasets are retrieved in TSV format from the IMDb website and merged using tconst. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year).
 After merging, cleaning, and aggregating, the datasets consists of 301,411 observations. This reduction in the number of observations is due to the process of merging and cleaning the data. In particular, missing values were removed, films with unrealistic durations (0 minutes or longer than 300 minutes) were excluded, and films listed as released in 2026 (which probably do not yet have complete ratings) were omitted.
-![Table 1. Operationalization of Variables](docs/images/Screenshot 2025-09-11 200218.png)
+![Table 1. Operationalization of Variables](pictures/table_1.png)
+![Table 2. Descriptive Statistics](pictures/table_2.png)
 
 
 ## Method
