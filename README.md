@@ -13,8 +13,7 @@
 In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of individual ratings (Wallace et al., 1993).
 *Provide background/motivation for your project*
 
-**To what extent does movie duration influence audience ratings, controlling for release year?
-**
+**To what extent does movie duration influence audience ratings, controlling for release year?**
 
 ## Data
 In this study, we use publicly available IMDb datasets: title.basics, containing metadata about movie titles (including release year and duration), and title.ratings, containing aggregate user ratings. The datasets are retrieved in TSV format from the IMDb website and merged using tconst. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year).
