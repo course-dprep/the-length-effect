@@ -55,4 +55,3 @@ This project is set up as part of the Master's course [Data Preparation & Workfl
 
 The project is implemented by team < x > members: < insert member details>
 
-test code
