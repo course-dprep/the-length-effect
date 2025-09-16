@@ -269,21 +269,26 @@ setkey(movies_dt, start_year)
 ```{r glance-tables}
 fmt <- if (knitr::is_latex_output()) "latex" else "html"
 
-yearly_dt %>%
-  head(10) %>%
-  knitr::kable(format = fmt, caption = "Preview: yearly_dt (first 10)") %>%
-  kableExtra::kable_styling(
-    full_width = FALSE,
-    bootstrap_options = c("striped", "hover", "condensed")
-  )
+cap1 <- if (knitr::is_latex_output()) "Preview: yearly\\_dt (first 10)" else "Preview: yearly_dt (first 10)"
+cap2 <- if (knitr::is_latex_output()) "Preview: runtime\\_summary\\_dt (first 10)" else "Preview: runtime_summary_dt (first 10)"
 
-runtime_summary_dt %>%
-  head(10) %>%
-  knitr::kable(format = fmt, caption = "Preview: runtime_summary_dt (first 10)") %>%
-  kableExtra::kable_styling(
-    full_width = FALSE,
-    bootstrap_options = c("striped", "hover", "condensed")
-  )
+knitr::kable(
+  head(yearly_dt, 10),
+  format  = fmt,
+  caption = cap1,
+  escape  = TRUE
+) |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+
+knitr::kable(
+  head(runtime_summary_dt, 10),
+  format  = fmt,
+  caption = cap2,
+  escape  = TRUE
+) |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
 ```
 
 
