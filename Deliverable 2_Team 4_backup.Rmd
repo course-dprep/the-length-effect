@@ -89,7 +89,6 @@ knitr::kable(snap, format = fmt, caption = "Data snapshots") |>
                             bootstrap_options = c("striped","hover","condensed"))
 ```
 
-
 ```{r}
 # Summary of title.ratings
 dim(title.ratings)     
@@ -161,12 +160,12 @@ descriptives %>%
 current_year <- 2025
 max_runtime  <- 300  
 
+
 to_na <- function(x) {
   y <- as.character(x)
   y[y %in% c("\\N", "N", "")] <- NA_character_
   y
 }
-
 
 title.basics_clean <- title.basics %>%
   mutate(
@@ -177,11 +176,10 @@ title.basics_clean <- title.basics %>%
   mutate(
     startYear      = suppressWarnings(as.integer(startYear)),
     runtimeMinutes = suppressWarnings(as.numeric(runtimeMinutes))) %>%
+
   filter(titleType == "movie") %>%               
   select(tconst, primaryTitle, startYear, runtimeMinutes) %>%
   distinct(tconst, .keep_all = TRUE)
-
-
 title.ratings_clean <- title.ratings %>%
   mutate(
     averageRating = to_na(averageRating),
@@ -190,6 +188,7 @@ title.ratings_clean <- title.ratings %>%
     numVotes      = as.integer(numVotes)) %>%
   select(tconst, averageRating, numVotes) %>%
   distinct(tconst, .keep_all = TRUE)
+
 
 
 movies_final <- title.basics_clean %>%
@@ -213,6 +212,7 @@ movies_final <- title.basics_clean %>%
 ```
 
 ```{r}
+
 list(
   n_rows = nrow(movies_final),
   min_runtime = min(movies_final$runtime_minutes),
@@ -251,7 +251,6 @@ yearly_dt <- movies_dt[
   by = start_year
 ][order(start_year)]
 
-
 movies_dt[
   , runtime_bin := cut(runtime_minutes, breaks = c(1, 90, 120, 150, 180, 300),
                        right = TRUE, include.lowest = TRUE)
@@ -263,7 +262,6 @@ runtime_summary_dt <- movies_dt[
     ),
   by = runtime_bin
 ][order(runtime_bin)]
-
 
 setkey(movies_dt, start_year)
 ```
