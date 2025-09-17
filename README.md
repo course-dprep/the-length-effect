@@ -33,17 +33,15 @@ After merging, cleaning, and aggregating, the datasets consists of 301,411 obser
 We estimate a linear regression (OLS) of average_rating on runtime_minutes, including start_year as a control. OLS is appropriate because the outcome is a continuous 0–10 mean rating, and we seek the average marginal effect of runtime. With our large sample, OLS delivers stable, easily interpretable coefficients in rating points per minute; we report HC3 robust standard errors to guard against heteroskedasticity and optionally include a quadratic term for runtime to allow non-linearity. The coefficient on runtime (or the derivative in the quadratic model) gives the expected change in rating for a one-minute increase holding release year constant, which directly answers our research question.
 
 ## Preview of Findings 
-*Gist of your findings*
-
+*Gist of your findings* 
 We found the coefficient of movie runtime is 0.0031 (p < 0.001), indicating a positive and significant effect associated with IMDb audience ratings, even after controlling for release year. In simple terms, it means that longer movies tend to receive slightly higher ratings on average.
 
 *How our findings/product are deployed:*
-
 After cleaning the dataset we used the regression outputs to predict how runtime relates to audience reception. This analysis can be replicated or extended by adding variables such as genre or budget, and the visualizations we produced (e.g., runtime bins vs. ratings) can be used directly from specialists and academics in the field in their reports and presentations.
 
 *Relevance of the findings/product:*
-
 Overall, our findings support the view that longer runtimes are positively associated with audience appreciation, consistent with the idea that extended durations may reflect higher production value, more complex storytelling, or stronger audience investment. However, given the relatively small effect size and potential genre-specific dynamics not accounted for in this analysis, caution is warranted in interpreting runtime as a direct driver of audience satisfaction. 
+
 
 ## Repository Overview 
 
