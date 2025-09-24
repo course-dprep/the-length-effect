@@ -25,8 +25,21 @@ From a managerial perspective, the findings are of direct relevance to industry 
 In this study, we use publicly available IMDb datasets: title.basics, containing metadata about movie titles (including release year and duration), and title.ratings, containing aggregate user ratings. The datasets are retrieved in TSV format from the IMDb website and merged using tconst. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year).
 After merging, cleaning, and aggregating, the datasets consists of 301,411 observations. This reduction in the number of observations is due to the process of merging and cleaning the data. In particular, missing values were removed, films with unrealistic durations (0 minutes or longer than 300 minutes) were excluded, and films listed as released in 2026 (which probably do not yet have complete ratings) were omitted.
 
-![Table 1. Operationalization of Variables](pictures/table_1.png)
-![Table 2. Descriptive Statistics](pictures/table_2.png)
+Table: Table 1. Variable Explanation  
+
+|Variable       |Type    |Definition                                                        |Role                 |
+|:--------------|:-------|:-----------------------------------------------------------------|:--------------------|
+|runtimeMinutes |integer |Duration of the movie in minutes                                  |Independent variable |
+|averageRating  |double  |Average IMDb user rating (0–10 scale, aggregated from user votes) |Dependent variable   |
+|startYear      |integer |Year the movie was released                                       |Control variable     |
+
+Table: Table 2. Descriptive Statistics  
+
+|Variable       |       N| Missing|        Mean|          SD|  Min|     Max|
+|:--------------|-------:|-------:|-----------:|-----------:|----:|-------:|
+|runtimeMinutes | 1139904|  476842|   58.180547| 3459.738308|    0| 3692080|
+|averageRating  | 1616746|       0|    6.940669|    1.392759|    1|      10|
+|startYear      | 1616490|     256| 2004.399885|   21.198678| 1874|    2026|
 
 ## Method
 
