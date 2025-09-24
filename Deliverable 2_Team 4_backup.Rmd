@@ -109,6 +109,8 @@ var_dict <- tribble(
   "averageRating",  "double",   "Average IMDb user rating (0–10 scale, aggregated from user votes)", "Dependent variable",
   "startYear",      "integer",  "Year the movie was released",                                      "Control variable")
 
+# cat(kable(var_dict, format = "markdown", caption = "Table 1. Variable Explanation"))
+
 var_dict %>%
   gt() %>%
   tab_header(title = "Table 1. Variable Explanation") %>%
@@ -149,6 +151,9 @@ Min      = c(min(data_final$runtimeMinutes, na.rm = TRUE),
 Max      = c(max(data_final$runtimeMinutes, na.rm = TRUE),
                max(data_final$averageRating,  na.rm = TRUE),
                max(data_final$startYear,      na.rm = TRUE)))
+
+#cat(kable(descriptives, format = "markdown", caption = "Table 2. Descriptive Statistics"))
+
 descriptives %>%
   gt() %>%
   tab_header(title = "Table 2. Descriptive Statistics") %>%
