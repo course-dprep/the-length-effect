@@ -69,7 +69,7 @@ Please follow the installation guides on <http://tilburgsciencehub.com/>.
 - To knit RMarkdown documents, make sure you have installed Pandoc using the [installation guide](https://pandoc.org/installing.html) on their website.
 - For R, make sure you have installed the following packages:
 
-    ```r
+    ```text
     install.packages("data.table")
     install.packages("tidyverse")
     install.packages("readr")
