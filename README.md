@@ -70,7 +70,14 @@ Overall, our findings support the view that longer runtimes are positively assoc
 
 ## About 
 
-This project is set up as part of the Master's course [Data Preparation & Workflow Management](https://dprep.hannesdatta.com/) at the [Department of Marketing](https://www.tilburguniversity.edu/about/schools/economics-and-management/organization/departments/marketing), [Tilburg University](https://www.tilburguniversity.edu/), the Netherlands.
+This project is set up as part of the Master’s course [Data Preparation & Programming Skills](https://dprep-book.hannesdatta.com) at the [Department of Marketing](https://www.tilburguniversity.edu/about/schools/economics-and-management/organization/departments/marketing), [Tilburg University](https://www.tilburguniversity.edu), the Netherlands.
 
-The project is implemented by team < x > members: < insert member details>
+The project is implemented by team 4, consisting of the following members:
+
+- [Bilyana Mihova](https://github.com/bilyanamm), e-mail: [b.mihova@tilburguniversity.edu](mailto:b.mihova@tilburguniversity.edu)
+- [Agata Kopiczynska](https://github.com/AgataKopiczynska), e-mail: [a.kopiczynska@tilburguniversity.edu](mailto:a.kopiczynska@tilburguniversity.edu)
+- [Simona Borisova](https://github.com/borisova-simona), e-mail: [s.borisova@tilburguniversity.edu](mailto:s.borisova@tilburguniversity.edu)
+- [Jekaterina Rakute](https://github.com/raakute), e-mail: [j.rakute@tilburguniversity.edu](mailto:j.rakute@tilburguniversity.edu)
+- [Thomas van den Dungen](https://github.com/ThomasvandenDungen), e-mail: [t.e.n.vdndungen@tilburguniversity.edu](mailto:t.e.n.vdndungen@tilburguniversity.edu)
+
 
