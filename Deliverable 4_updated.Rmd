@@ -110,21 +110,20 @@ knitr::kable(summary_tb1, caption = "Data size summary") |>
 
 ```{r}
 # checking the variable type
-str(title.basics)                 # compact overview
-dplyr::glimpse(title.basics)      # tidyverse overview
-sapply(title.basics, class)       # class of each column
-sapply(title.basics, typeof)      # storage type of each column
 
-str(title.ratings)                 # compact overview
-dplyr::glimpse(title.ratings)      # tidyverse overview
-sapply(title.ratings, class)       # class of each column
-sapply(title.ratings, typeof)      # storage type of each column
+# title.basics: class overview + storage type
+dplyr::glimpse(title.basics[, c("primaryTitle", "startYear", "runtimeMinutes")])
+sapply(title.basics[, c("primaryTitle", "startYear", "runtimeMinutes")], typeof)
 
+# title.ratings: class overview + storage type
+dplyr::glimpse(title.ratings[, "averageRating", drop = FALSE])
+sapply(title.ratings[, "averageRating", drop = FALSE], typeof)
 ```
 
 ```{r Data Exploration}
 # changing character for numerical and change \N for NA
 
+# Function to replace "\N" and "" with NA
 to_na <- function(x) {
   y <- as.character(x)
   y[y %in% c("\\N", "N", "")] <- NA_character_
@@ -154,15 +153,23 @@ title.ratings_clean <- title.ratings %>%
   select(tconst, averageRating, numVotes) %>%
   distinct(tconst, .keep_all = TRUE)
 
+# Checking how many NAs are there
+colSums(is.na(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")]))
+colSums(is.na(title.ratings_clean[, c("averageRating", "numVotes")]))
+
 ```
 
 
 ```{r Data Exploration}
-# Checking again the variable type correct
-str(title.basics_clean)                 # compact overview
-dplyr::glimpse(title.basics_clean)      # tidyverse overview
-sapply(title.basics_clean, class)       # class of each column
-sapply(title.basics_clean, typeof)
+# checking again the variable type
+
+# title.basics: class overview + storage type
+dplyr::glimpse(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")])
+sapply(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")], typeof)
+
+# title.ratings: class overview + storage type
+dplyr::glimpse(title.ratings_clean[, "averageRating", drop = FALSE])
+sapply(title.ratings_clean[, "averageRating", drop = FALSE], typeof)
 ```
 
 
@@ -170,7 +177,7 @@ sapply(title.basics_clean, typeof)
 ```{r Data Exploration}
 # Variable table:
 var_dict <- tribble(
-  ~Variable,        ~Date_Class,      ~Definition,                                                        ~Role,
+  ~Variable,        ~Class,      ~Definition,                                                        ~Role,
   "runtimeMinutes", "numeric",  "Duration of the movie in minutes",                                 "Independent variable",
   "averageRating",  "numeric",   "Average IMDb user rating (0–10 scale, aggregated from user votes)", "Dependent variable",
   "startYear",      "numeric",  "Year the movie was released",                                      "Control variable")
@@ -182,9 +189,12 @@ var_dict %>%
 ```
 
 ```{r Data Exploration}
-# checking outliers in averageRating - histogram
+# Count ratings below 0 and above 10
+sum(title.ratings_clean$averageRating < 0, na.rm = TRUE)
+sum(title.ratings_clean$averageRating > 10, na.rm = TRUE)
 
-ratings_clean <- dplyr::filter(title.ratings, !is.na(averageRating))
+# checking outliers in averageRating - histogram
+ratings_clean <- dplyr::filter(title.ratings_clean, !is.na(averageRating))
 
 ggplot(ratings_clean, aes(x = averageRating)) +
   geom_histogram(binwidth = 0.25, color = "white", fill = "grey30", boundary = 0) +
@@ -192,16 +202,8 @@ ggplot(ratings_clean, aes(x = averageRating)) +
   labs(x = "Average rating", y = "Count", title = "Average Rating IMDb") +
   theme_minimal(base_size = 14)
 
-install.packages("checkmate")   # run once in the Console
-library(checkmate)
 
-# allow NAs, but every non-NA must be within [0, 10]
-assert_numeric(
-  title.ratings$averageRating,
-  lower = 0, upper = 10,
-  any.missing = TRUE,  # NAs allowed
-  all.missing = FALSE  # not all NA
-)
+
 
 
 ```
@@ -298,7 +300,7 @@ keys <- c("title", "start_year", "runtime_minutes")
 
 movies_dup <- merged_data %>% as_tibble()
 
-sum( duplicated(select(movies_dup, all_of(keys))) )
+sum(duplicated(select(movies_dup, all_of(keys))) )
 
 
 dups_rows <- movies_dup %>%
@@ -314,6 +316,20 @@ dup_groups <- movies_dup %>%
 
 dups_rows %>% slice_head(n = 80)
 dup_groups %>% slice_head(n = 40)
+
+# --- Checking for potential duplicates in cleaned dataset ---
+
+# Check by movie title (since tconst is unique but titles may repeat)
+dup_titles <- title.basics_clean %>%
+  count(primaryTitle, sort = TRUE) %>%
+  filter(n > 1)
+
+# How many duplicated titles?
+nrow(dup_titles)
+
+# Show first few examples of repeated titles
+dup_titles %>% slice_head(n = 20)
+
 
 ```
 
