@@ -7,6 +7,5 @@ str(title.basics)
 title.ratings <- fread("https://datasets.imdbws.com/title.ratings.tsv.gz", sep="\t", quote="")
 str(title.ratings)
 
-dir.create("data/raw", recursive = TRUE, showWarnings = FALSE)
 saveRDS(title.basics, file = "data/raw/title_basics.rds")
 saveRDS(title.ratings, file = "data/raw/title_ratings.rds")

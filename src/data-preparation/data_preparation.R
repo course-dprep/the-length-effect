@@ -1,6 +1,15 @@
 library(data.table)
 library(dplyr)
-dt <- readRDS("data/intermediate/movies_joined.rds")
+library(checkmate)
+library(ggplot2)  
+library(gt)        
+library(tibble)   
+library(knitr)     
+library(kableExtra)
+title.basics <- readRDS("data/raw/title_basics.rds")
+title.ratings <- readRDS("data/raw/title_ratings.rds")
+title.basics_clean  <- readRDS("data/explore/title_basics_clean.rds")
+title.ratings_clean <- readRDS("data/explore/title_ratings_clean.rds")
 
 # Filter for movies only 
 title.basics_clean <- title.basics %>%
@@ -78,8 +87,6 @@ descriptives %>%
   tab_options(column_labels.font.weight="bold")
 
 # Checking the duplicated data
-library(dplyr)
-
 keys <- c("title", "start_year", "runtime_minutes")
 
 movies_dup <- merged_data %>% as_tibble()
@@ -119,7 +126,7 @@ movies_final_no_na <- movies_final_clean %>%
          !is.na(start_year),
          !is.na(title))
 
-# drop NA in those columns - chat
+# drop NA in those columns 
 movies_final_no_na <- tidyr::drop_na(movies_final_clean, runtime_minutes, average_rating, start_year, title)
 # or
 movies_final_no_na <- movies_final_clean %>%
@@ -129,4 +136,4 @@ n_removed <- nrow(movies_final_clean) - nrow(movies_final_no_na)
 n_removed
 
 dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
-saveRDS(dt, "data/processed/movies_prepared.rds")
+saveRDS(movies_final_clean, "data/processed/movies_prepared.rds")
