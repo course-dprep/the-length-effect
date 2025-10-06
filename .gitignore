@@ -2,9 +2,12 @@
 .RData
 .DS_Store
 .Rproj.user
+<<<<<<< HEAD
 data/raw/*.rds
 data/raw/*.rds
 data/raw/*.rds
 data/raw/*.rds
 data/raw/*.rds
 data/raw/*.rds
+=======
+>>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a

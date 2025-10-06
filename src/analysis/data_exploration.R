@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 library(data.table)
 library(dplyr)
 library(checkmate)
@@ -50,6 +51,9 @@ dplyr::glimpse(title.ratings)      # tidyverse overview
 sapply(title.ratings, class)       # class of each column
 sapply(title.ratings, typeof)      # storage type of each column
 
+=======
+ndt <- readRDS("data/processed/movies_prepared.rds")
+>>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
 # changing character for numerical and change \N for NA
 to_na <- function(x) {
   y <- as.character(x)
@@ -109,14 +113,24 @@ ggplot(ratings_clean, aes(x = averageRating)) +
   labs(x = "Average rating", y = "Count", title = "Average Rating IMDb") +
   theme_minimal(base_size = 14)
 
+<<<<<<< HEAD
+=======
+install.packages("checkmate")   # run once in the Console
+library(checkmate)
+
+>>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
 # allow NAs, but every non-NA must be within [0, 10]
 assert_numeric(
   title.ratings$averageRating,
   lower = 0, upper = 10,
   any.missing = TRUE,  # NAs allowed
   all.missing = FALSE  # not all NA
+<<<<<<< HEAD
 )
 
 dir.create("data/explore", recursive = TRUE, showWarnings = FALSE)
 saveRDS(title.basics_clean, file = "data/explore/title_basics_clean.rds")
 saveRDS(title.ratings_clean, file = "data/explore/title_ratings_clean.rds")
+=======
+)
+>>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
