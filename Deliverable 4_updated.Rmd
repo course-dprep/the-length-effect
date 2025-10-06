@@ -1,7 +1,7 @@
 ---
-title: "Deliverable 5"
+title: "Final analysis"
 output: pdf_document
-date: "2025-09-28"
+date: "2025-10-10"
 ---
 
 # Research Motivation
@@ -13,7 +13,6 @@ Empirical evidence on the relationship between movie duration and audience ratin
 Given that rating behaviour and audience preferences evolve over time (Amendola et al., 2015), we incorporate release year as a control variable to enhance the internal validity of our analysis and account for temporal dynamics in consumer behaviour.
 
 # Research Question
-
 To what extent does movie duration influence audience ratings, controlling for release year?
 
 ```{r setup, include=FALSE}
@@ -52,31 +51,20 @@ if (length(present_opt)) {
 }
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
 ```{r}
+## Data Loading
+
 # Load IMDb title.basics data
 title.basics <- fread("https://datasets.imdbws.com/title.basics.tsv.gz")
-str(title.basics)
-```
 
-```{r}
 # Load IMDb title.ratings data
 title.ratings <- fread("https://datasets.imdbws.com/title.ratings.tsv.gz")
-str(title.ratings)
 ```
 
-```{r}
-# Summary of title.basics
+```{r - Data Exploration}
+## Initial data overview
 
+# Summary of title.basics
 dim(title.basics)     
 nrow(title.basics)      
 ncol(title.basics)       
@@ -84,9 +72,7 @@ colnames(title.basics)
 str(title.basics)      
 summary(title.basics)   
 head(title.basics, 10)
-```
 
-```{r}
 # Summary of title.ratings
 dim(title.ratings)     
 nrow(title.ratings)      
@@ -96,91 +82,75 @@ str(title.ratings)
 summary(title.ratings)   
 head(title.ratings, 10)
 ```
-```{r}
+
+```{r - Data Exploration}
 # Complete summary title.basics & title.ratings
-summary_tb1 <- tibble::tibble(
+data_size_summary <- tibble::tibble(
   dataset = c("title.basics","title.ratings"),
   n_rows  = c(nrow(title.basics), nrow(title.ratings)),
   n_cols  = c(ncol(title.basics), ncol(title.ratings)))
 
-knitr::kable(summary_tb1, caption = "Data size summary") |>
+knitr::kable(data_size_summary, caption = "Data size summary") |>
   kableExtra::kable_styling(full_width = FALSE,
                             bootstrap_options = c("striped","hover","condensed"))
 ```
 
-```{r}
-# checking the variable type
-
-# title.basics: class overview + storage type
+```{r - Data Exploration}
+# Checking variable type
 dplyr::glimpse(title.basics[, c("primaryTitle", "startYear", "runtimeMinutes")])
 sapply(title.basics[, c("primaryTitle", "startYear", "runtimeMinutes")], typeof)
 
-# title.ratings: class overview + storage type
 dplyr::glimpse(title.ratings[, "averageRating", drop = FALSE])
 sapply(title.ratings[, "averageRating", drop = FALSE], typeof)
 ```
 
-```{r Data Exploration}
-# changing character for numerical and change \N for NA
-
-# Function to replace "\N" and "" with NA
+```{r - Data Preparation}
+# Replace "\N" and "" with NA
 to_na <- function(x) {
   y <- as.character(x)
   y[y %in% c("\\N", "N", "")] <- NA_character_
   y
 }
 
-#Cleaning the titile.basics
+# Cleaning the titile.basics dataset
 title.basics_clean <- title.basics %>%
-  mutate(
-    titleType      = to_na(titleType),
-    primaryTitle   = to_na(primaryTitle),
-    startYear      = to_na(startYear),
-    runtimeMinutes = to_na(runtimeMinutes)) %>% 
-  mutate(
-    startYear      = suppressWarnings(as.integer(startYear)),
+  mutate(across(c(titleType, primaryTitle, startYear, runtimeMinutes), to_na)) %>%
+  mutate(startYear = suppressWarnings(as.integer(startYear)),
     runtimeMinutes = suppressWarnings(as.numeric(runtimeMinutes))) %>%
-  select(tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) %>%
+  select(tconst, titleType, primaryTitle, originalTitle, isAdult,
+         startYear, endYear, runtimeMinutes, genres) %>%
   distinct(tconst, .keep_all = TRUE)
 
-#Cleaning the title.ratings
+# Cleaning the title.ratings dataset
 title.ratings_clean <- title.ratings %>%
-  mutate(
-    averageRating = to_na(averageRating),
-    numVotes      = to_na(numVotes)) %>%
+  mutate(across(c(averageRating, numVotes), to_na)) %>%
   mutate(averageRating = as.numeric(averageRating),
-    numVotes      = as.integer(numVotes)) %>%
+    numVotes = as.integer(numVotes)) %>%
   select(tconst, averageRating, numVotes) %>%
   distinct(tconst, .keep_all = TRUE)
-
-# Checking how many NAs are there
-colSums(is.na(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")]))
-colSums(is.na(title.ratings_clean[, c("averageRating", "numVotes")]))
-
 ```
 
 
 ```{r Data Exploration}
-# checking again the variable type
-
-# title.basics: class overview + storage type
+# Verification of variable types after the cleaning
 dplyr::glimpse(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")])
 sapply(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")], typeof)
 
-# title.ratings: class overview + storage type
 dplyr::glimpse(title.ratings_clean[, "averageRating", drop = FALSE])
 sapply(title.ratings_clean[, "averageRating", drop = FALSE], typeof)
+
+# Checking missing values
+colSums(is.na(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")]))
+colSums(is.na(title.ratings_clean[, c("averageRating", "numVotes")]))
 ```
-
-
 
 ```{r Data Exploration}
 # Variable table:
 var_dict <- tribble(
-  ~Variable,        ~Class,      ~Definition,                                                        ~Role,
-  "runtimeMinutes", "numeric",  "Duration of the movie in minutes",                                 "Independent variable",
+  ~Variable,  ~Class, ~Definition, ~Role,
+  "runtimeMinutes", "numeric",  "Duration of the movie in minutes", "Independent variable",
   "averageRating",  "numeric",   "Average IMDb user rating (0–10 scale, aggregated from user votes)", "Dependent variable",
-  "startYear",      "numeric",  "Year the movie was released",                                      "Control variable")
+  "startYear",      "numeric",  "Year the movie was released", "Control variable")
 
 var_dict %>%
   gt() %>%
@@ -189,183 +159,132 @@ var_dict %>%
 ```
 
 ```{r Data Exploration}
-# Count ratings below 0 and above 10
-sum(title.ratings_clean$averageRating < 0, na.rm = TRUE)
-sum(title.ratings_clean$averageRating > 10, na.rm = TRUE)
+### Checking for outliers in IMDb ratings
 
-# checking outliers in averageRating - histogram
+# Numeric summary of average ratings
+summary(title.ratings_clean$averageRating)
+
+# Histogram of rating distribution (excluding missing values)
 ratings_clean <- dplyr::filter(title.ratings_clean, !is.na(averageRating))
 
 ggplot(ratings_clean, aes(x = averageRating)) +
   geom_histogram(binwidth = 0.25, color = "white", fill = "grey30", boundary = 0) +
   scale_x_continuous(limits = c(0, 10), breaks = 0:10) +
-  labs(x = "Average rating", y = "Count", title = "Average Rating IMDb") +
+  labs(
+    x = "Average rating",
+    y = "Count",
+    title = "Distribution of IMDb Ratings"
+  ) +
   theme_minimal(base_size = 14)
-
-
-
-
-
 ```
 
 ```{r Data Preparation}
-# Filter for movies only 
-
-title.basics_clean <- title.basics %>%
-  filter(titleType == "movie") %>%               
+# Filter for movies only (and reasonable ranges)
+title.basics_filtered <- title.basics_clean %>%
+  filter(titleType == "movie",
+         runtimeMinutes >0,
+         runtimeMinutes <= 300,
+         startYear <= 2025) %>%               
   select(tconst, primaryTitle, startYear, runtimeMinutes) %>%
   distinct(tconst, .keep_all = TRUE)
+```
 
-# Renaming
-title.basics_clean <- title.basics_clean %>%
- rename(
+```{r}
+# Renaming variables
+title.basics_filtered <- title.basics_filtered %>%
+  rename(
     title           = primaryTitle,
     start_year      = startYear,
     runtime_minutes = runtimeMinutes)
 
 title.ratings_clean <- title.ratings_clean %>%
-```
-
-```{r Data Preparation}
-# Set filter data and movie duration 
-
-title.basics_clean <- title.basics_clean %>%
- 
-  filter(runtime_minutes > 0,
-         runtime_minutes <= 300) %>%
-  
-  filter(start_year <= 2025) 
-  
+  rename(
+    average_rating  = averageRating,
+    votes           = numVotes)
 ```
 
 ```{r Data Preparation}
 # Merging datasets
-
-merged_data <- title.basics_clean %>%
+merged_data <- title.basics_filtered %>%
   select(tconst, runtime_minutes, start_year, title) %>%
   mutate(
-    runtime_minutes = suppressWarnings(as.numeric(runtime_minutes)),
-    start_year      = suppressWarnings(as.integer(start_year)),
-    title = suppressWarnings(as.character(title))
-  ) %>%
+    runtime_minutes = (as.numeric(runtime_minutes)),
+    start_year      = (as.integer(start_year)),
+    title = (as.character(title))) %>%
   inner_join(
     title.ratings_clean %>% select(tconst, average_rating, votes),
-    by = "tconst"
-  ) %>%
+    by = "tconst") %>%
   mutate(
     average_rating = as.numeric(average_rating), 
-    votes= as.integer(votes)
-) 
-
-merged_data <- merged_data %>%
- 
-  filter(runtime_minutes > 0,
-         runtime_minutes <= 300) %>%
-  
-  filter(start_year <= 2025) 
-```
-
-```{r}
-descriptives <- tibble(
-  Variable = c("runtime_minutes","average_rating","start_year"),
-N        = c(sum(!is.na(merged_data$runtime_minutes)),
-               sum(!is.na(merged_data$average_rating)),
-               sum(!is.na(merged_data$start_year))),
-Missing  = c(sum(is.na(merged_data$runtime_minutes)),
-               sum(is.na(merged_data$average_rating)),
-               sum(is.na(merged_data$start_year))),
-Mean     = c(mean(merged_data$runtime_minutes, na.rm = TRUE),
-               mean(merged_data$average_rating,  na.rm = TRUE),
-               mean(merged_data$start_year,      na.rm = TRUE)),
-SD       = c(sd(merged_data$runtime_minutes, na.rm = TRUE),
-               sd(merged_data$average_rating,  na.rm = TRUE),
-               sd(merged_data$start_year,      na.rm = TRUE)),
-Min      = c(min(merged_data$runtime_minutes, na.rm = TRUE),
-               min(merged_data$average_rating,  na.rm = TRUE),
-               min(merged_data$start_year,      na.rm = TRUE)),
-Max      = c(max(merged_data$runtime_minutes, na.rm = TRUE),
-               max(merged_data$average_rating,  na.rm = TRUE),
-               max(merged_data$start_year,      na.rm = TRUE)))
-descriptives %>%
-  gt() %>%
-  tab_header(title = "Table 2. Descriptive Statistics") %>%
-  tab_options(column_labels.font.weight="bold")
+    votes= as.integer(votes)) 
 ```
 
 ```{r Data Preparation}
 # Checking the duplicated data
-library(dplyr)
-
 keys <- c("title", "start_year", "runtime_minutes")
 
-movies_dup <- merged_data %>% as_tibble()
+dup_count <- sum(duplicated(select(merged_data, all_of(keys))))
+dup_count
 
-sum(duplicated(select(movies_dup, all_of(keys))) )
-
-
-dups_rows <- movies_dup %>%
-  mutate(.is_dup = duplicated(select(., all_of(keys))) |
+duplicated_movies <- merged_data %>%
+  mutate(is_duplicate = duplicated(select(., all_of(keys))) |
                      duplicated(select(., all_of(keys)), fromLast = TRUE)) %>%
-  filter(.is_dup) %>%
-  select(-.is_dup)
+  filter(is_duplicate) %>%
+  select(title, start_year, runtime_minutes, average_rating, votes) %>%
+  arrange(title, start_year, runtime_minutes)
 
-dup_groups <- movies_dup %>%
+# Count duplicate groups (titles that appear multiple times)
+duplicate_summary <- merged_data %>%
   count(across(all_of(keys)), sort = TRUE) %>%
-  filter(n > 1)
-
-
-dups_rows %>% slice_head(n = 80)
-dup_groups %>% slice_head(n = 40)
-
-# --- Checking for potential duplicates in cleaned dataset ---
-
-# Check by movie title (since tconst is unique but titles may repeat)
-dup_titles <- title.basics_clean %>%
-  count(primaryTitle, sort = TRUE) %>%
-  filter(n > 1)
-
-# How many duplicated titles?
-nrow(dup_titles)
-
-# Show first few examples of repeated titles
-dup_titles %>% slice_head(n = 20)
-
-
+  filter(n > 1) %>% slice_head(n = 20)
+duplicate_summary
 ```
 
 ```{r Data preperation}
-# Dropping duplicated data
-movies_final_clean <- movies_dup %>%  
+# Handling Duplicates - retaining only one record per movie, the one with highest number of votes
+movies_deduplicated <- merged_data %>%
   group_by(across(all_of(keys))) %>%
-  slice_max(votes, with_ties = FALSE) %>%   
+  slice_max(votes, with_ties = FALSE) %>%  
   ungroup()
 
-# How many rows were removed?
-dropped <- nrow(movies_dup) - nrow(movies_final_clean)
-dropped
-
-# Sanity check: no duplicates remain
-stopifnot(!any(duplicated(select(movies_final_clean, all_of(keys)))))
-
+# Verification
+sum(duplicated(select(movies_deduplicated, all_of(keys))))
 ```
 
 ```{r}
-# Handling missing data
-movies_final_no_na <- movies_final_clean %>%
-filter(!is.na(runtime_minutes),
-         !is.na(average_rating),
-         !is.na(start_year),
-          !is.na(title))
+## Handling missing data
+colSums(is.na(movies_deduplicated[, c("runtime_minutes", "average_rating", "start_year", "title")]))
+summary(movies_deduplicated)
+movies_final_clean <- movies_deduplicated
+```
 
-# drop NA in those columns - chat
-movies_final_no_na <- tidyr::drop_na(movies_final_clean, runtime_minutes, average_rating, start_year, title)
-# or
-movies_final_no_na <- movies_final_clean %>%
-  filter(!if_any(c(runtime_minutes, average_rating, start_year, title), is.na))
 
-n_removed <- nrow(movies_final_clean) - nrow(movies_final_no_na)
-n_removed
-
+```{r}
+# Descriptive table
+descriptives <- tibble(
+  Variable = c("runtime_minutes","average_rating","start_year"),
+N        = c(sum(!is.na(movies_final_clean$runtime_minutes)),
+               sum(!is.na(movies_final_clean$average_rating)),
+               sum(!is.na(movies_final_clean$start_year))),
+Missing  = c(sum(is.na(movies_final_clean$runtime_minutes)),
+               sum(is.na(movies_final_clean$average_rating)),
+               sum(is.na(movies_final_clean$start_year))),
+Mean     = c(mean(movies_final_clean$runtime_minutes, na.rm = TRUE),
+               mean(movies_final_clean$average_rating,  na.rm = TRUE),
+               mean(movies_final_clean$start_year,      na.rm = TRUE)),
+SD       = c(sd(movies_final_clean$runtime_minutes, na.rm = TRUE),
+               sd(movies_final_clean$average_rating,  na.rm = TRUE),
+               sd(movies_final_clean$start_year,      na.rm = TRUE)),
+Min      = c(min(movies_final_clean$runtime_minutes, na.rm = TRUE),
+               min(movies_final_clean$average_rating,  na.rm = TRUE),
+               min(movies_final_clean$start_year,      na.rm = TRUE)),
+Max      = c(max(movies_final_clean$runtime_minutes, na.rm = TRUE),
+               max(movies_final_clean$average_rating,  na.rm = TRUE),
+               max(movies_final_clean$start_year,      na.rm = TRUE)))
+descriptives %>%
+  gt() %>%
+  tab_header(title = "Table 2. Descriptive Statistics") %>%
+  tab_options(column_labels.font.weight="bold")
 ```
 
 ```{r Data Analysis}
