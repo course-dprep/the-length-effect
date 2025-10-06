@@ -62,11 +62,34 @@ Overall, our findings support the view that longer runtimes are positively assoc
 
 ## Dependencies 
 
-Please follow the installation guides on [Tilburg Science Hub](http://tilburgsciencehub.com/):
+Please follow the installation guides on <http://tilburgsciencehub.com/>.
 
-- [R – Installation guide](https://tilburgsciencehub.com/topics/computer-setup/software-installation/rstudio/r/)
-- [Make – Installation guide](https://tilburgsciencehub.com/topics/automation/automation-tools/makefiles/make/)
+- R. [Installation guide](https://tilburgsciencehub.com/topics/computer-setup/software-installation/rstudio/r/).
+- Make. [Installation guide](https://tilburgsciencehub.com/topics/automation/automation-tools/makefiles/make/).
+- To knit RMarkdown documents, make sure you have installed Pandoc using the [installation guide](https://pandoc.org/installing.html) on their website.
+- For R, make sure you have installed the following packages:
 
+    ```text
+    install.packages("data.table")
+    install.packages("tidyverse")
+    install.packages("readr")
+    install.packages("lubridate")
+    install.packages("knitr")
+    install.packages("kableExtra")
+    install.packages("broom")
+    install.packages("gt")
+    install.packages("ISOweek")
+    install.packages("zoo")
+    install.packages("janitor")
+    install.packages("ggplot2")
+    install.packages("dplyr")
+    install.packages("tidyr")
+    install.packages("tibble")
+    install.packages("checkmate")
+    install.packages("modelsummary")
+    install.packages("sandwich")
+    install.packages("lmtest")
+    ```
 
 ## Running Instructions 
 
