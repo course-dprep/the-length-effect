@@ -224,8 +224,7 @@ title.basics_clean <- title.basics_clean %>%
 title.ratings_clean <- title.ratings_clean %>%
   rename(
     average_rating  = averageRating,
-    votes           = numVotes
-    )
+    votes           = numVotes)
 ```
 
 ```{r Data Preparation}

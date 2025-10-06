@@ -1,13 +1,21 @@
+library(data.table)
+library(dplyr)
+library(checkmate)
+library(ggplot2)  
+library(gt)        
+library(tibble)   
+library(knitr)     
+library(kableExtra)
+install.packages("contrib.url")
+
+movies_final_clean <- readRDS("data/processed/movies_prepared.rds")
+
 # Analysis, linear regression
 
 LR1 <- lm(average_rating ~ runtime_minutes + start_year, data = movies_final_clean)
 summary(LR1)
 
 install.packages(c("modelsummary", "sandwich", "lmtest", "broom"))
-
-library(modelsummary)
-library(sandwich)
-
 m_lin <- lm(average_rating ~ runtime_minutes + start_year, data = movies_final_clean)
 VHC3 <- sandwich::vcovHC(m_lin, type = "HC3")
 
@@ -23,9 +31,6 @@ msummary(
   gof_omit = "IC|AIC|BIC",
   title = "OLS: Audience rating on runtime, controlling for release year (HC3 SE)"
 )
-
-
-library(ggplot2)
 
 p1 <- ggplot(movies_final_clean, aes(x = runtime_minutes, y = average_rating)) +
   geom_point(alpha = 0.15) +
@@ -48,3 +53,5 @@ with(movies_final_clean, c(
   min_runtime = min(runtime_minutes, na.rm = TRUE),
   quantiles = paste(quantile(runtime_minutes, c(.01,.1,.25,.5,.75,.9,.99), na.rm=TRUE), collapse=", ")
 ))
+
+dir.create("data/analysis", recursive = TRUE, showWarnings = FALSE)

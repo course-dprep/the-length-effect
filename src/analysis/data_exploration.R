@@ -1,4 +1,55 @@
-ndt <- readRDS("data/processed/movies_prepared.rds")
+library(data.table)
+library(dplyr)
+library(checkmate)
+library(ggplot2)  
+library(gt)        
+library(tibble)   
+library(knitr)     
+library(kableExtra)
+
+title.basics <- readRDS("data/raw/title_basics.rds")
+title.ratings <- readRDS("data/raw/title_ratings.rds")
+
+# Summary of title.basics
+
+dim(title.basics)     
+nrow(title.basics)      
+ncol(title.basics)       
+colnames(title.basics) 
+str(title.basics)      
+summary(title.basics)   
+head(title.basics, 10)
+
+# Summary of title.ratings
+dim(title.ratings)     
+nrow(title.ratings)      
+ncol(title.ratings)       
+colnames(title.ratings) 
+str(title.ratings)      
+summary(title.ratings)   
+head(title.ratings, 10)
+
+# Complete summary title.basics & title.ratings
+summary_tb1 <- tibble::tibble(
+  dataset = c("title.basics","title.ratings"),
+  n_rows  = c(nrow(title.basics), nrow(title.ratings)),
+  n_cols  = c(ncol(title.basics), ncol(title.ratings)))
+
+knitr::kable(summary_tb1, caption = "Data size summary") |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+
+# checking the variable type
+str(title.basics)                 # compact overview
+dplyr::glimpse(title.basics)      # tidyverse overview
+sapply(title.basics, class)       # class of each column
+sapply(title.basics, typeof)      # storage type of each column
+
+str(title.ratings)                 # compact overview
+dplyr::glimpse(title.ratings)      # tidyverse overview
+sapply(title.ratings, class)       # class of each column
+sapply(title.ratings, typeof)      # storage type of each column
+
 # changing character for numerical and change \N for NA
 to_na <- function(x) {
   y <- as.character(x)
@@ -58,9 +109,6 @@ ggplot(ratings_clean, aes(x = averageRating)) +
   labs(x = "Average rating", y = "Count", title = "Average Rating IMDb") +
   theme_minimal(base_size = 14)
 
-install.packages("checkmate")   # run once in the Console
-library(checkmate)
-
 # allow NAs, but every non-NA must be within [0, 10]
 assert_numeric(
   title.ratings$averageRating,
@@ -68,3 +116,7 @@ assert_numeric(
   any.missing = TRUE,  # NAs allowed
   all.missing = FALSE  # not all NA
 )
+
+dir.create("data/explore", recursive = TRUE, showWarnings = FALSE)
+saveRDS(title.basics_clean, file = "data/explore/title_basics_clean.rds")
+saveRDS(title.ratings_clean, file = "data/explore/title_ratings_clean.rds")
