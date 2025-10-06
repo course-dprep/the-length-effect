@@ -62,7 +62,11 @@ Overall, our findings support the view that longer runtimes are positively assoc
 
 ## Dependencies 
 
-*Explain any tools or packages that need to be installed to run this workflow.*
+Please follow the installation guides on [Tilburg Science Hub](http://tilburgsciencehub.com/):
+
+- [R – Installation guide](https://tilburgsciencehub.com/topics/computer-setup/software-installation/rstudio/r/)
+- [Make – Installation guide](https://tilburgsciencehub.com/topics/automation/automation-tools/makefiles/make/)
+
 
 ## Running Instructions 
 
