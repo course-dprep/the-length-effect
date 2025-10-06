@@ -93,7 +93,23 @@ Please follow the installation guides on <http://tilburgsciencehub.com/>.
 
 ## Running Instructions 
 
-*Provide step-by-step instructions that have to be followed to run this workflow.*
+Running The Code By Make
+
+To run the code, follow these instructions:
+1. Fork this repository
+2. Open your command line/terminal and run the following code:
+    ```bash
+    git clone https://github.com/course-dprep/the-length-effect.git
+    ```
+3. Set your working directory to `the-length-effect` and run the following command:
+    ```bash
+    make
+    ```
+4. When make has successfully run all the code, it will generate a PDF with the presentation of our analysis.
+5. To clean the data of all raw and unnecessary data files created during the pipeline, run the following code in the command line/terminal:
+    ```bash
+    make clean
+    ```
 
 ## About 
 
