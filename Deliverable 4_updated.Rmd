@@ -222,14 +222,6 @@ title.basics_clean <- title.basics_clean %>%
     runtime_minutes = runtimeMinutes)
 
 title.ratings_clean <- title.ratings_clean %>%
-  rename(
-    average_rating  = averageRating,
-<<<<<<< HEAD
-    votes           = numVotes)
-=======
-    votes           = numVotes
-    )
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
 ```
 
 ```{r Data Preparation}
