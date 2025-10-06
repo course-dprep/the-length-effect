@@ -1,0 +1,384 @@
+---
+title: "Deliverable 4"
+output: pdf_document
+date: "2025-09-18"
+---
+
+# Research Motivation
+
+In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of individual ratings (Wallace et al., 1993). Runtime, frequently included as a control variable in prior research, also carries meaningful implications for audience perception (Ashari et al., 2022). A longer duration of the movie often reflects higher production value and suggests a narrative depth that justifies viewers’ time investment. However, excessive runtime may adversely affect enjoyment due to decreased audience attention and potential fatigue.
+
+Empirical evidence on the relationship between movie duration and audience ratings remains inconclusive. Some studies identify a positive association, whereas others report a non-linear or genre specific effect. To address this gap, the current study investigates the influence of movie duration on audience ratings.
+
+Given that rating behaviour and audience preferences evolve over time (Amendola et al., 2015), we incorporate release year as a control variable to enhance the internal validity of our analysis and account for temporal dynamics in consumer behaviour.
+
+# Research Question
+
+To what extent does movie duration influence audience ratings, controlling for release year?
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.width = 7, fig.height = 4, dpi = 180
+)
+options(tidyverse.quiet = TRUE)
+```
+
+```{r packages}
+need_pkgs <- c(
+  "tidyverse","data.table","readr","lubridate",
+  "knitr","kableExtra","broom"
+)
+install.packages("kableExtra")
+
+# Optional (used only if you later add those features)
+opt_pkgs <- c("ISOweek","zoo","janitor","gt")
+
+missing <- setdiff(need_pkgs, rownames(installed.packages()))
+if (length(missing)) {
+  stop(
+    sprintf("Please install missing packages before knitting: %s",
+            paste(missing, collapse = ", "))
+  )
+}
+
+invisible(lapply(need_pkgs, library, character.only = TRUE))
+
+present_opt <- intersect(opt_pkgs, rownames(installed.packages()))
+if (length(present_opt)) {
+  invisible(lapply(present_opt, library, character.only = TRUE))
+}
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+```{r}
+# Load IMDb title.basics data
+basics <- fread("https://datasets.imdbws.com/title.basics.tsv.gz")
+title.basics <- basics
+```
+
+```{r}
+# Load IMDb title.ratings data
+title.ratings <- fread("https://datasets.imdbws.com/title.ratings.tsv.gz")
+str(title.ratings)
+```
+
+```{r data-snapshots}
+# Summary of title.basics
+fmt <- if (knitr::is_latex_output()) "latex" else "html"
+
+snap <- tibble::tibble(
+  dataset = c("title.basics","title.ratings"),
+  n_rows  = c(nrow(title.basics), nrow(title.ratings)),
+  n_cols  = c(ncol(title.basics), ncol(title.ratings))
+)
+
+knitr::kable(snap, format = fmt, caption = "Data snapshots") |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+```
+
+```{r}
+# Summary of title.ratings
+dim(title.ratings)     
+nrow(title.ratings)      
+ncol(title.ratings)       
+colnames(title.ratings) 
+str(title.ratings)      
+summary(title.ratings)   
+head(title.ratings, 10)
+
+```
+
+```{r}
+# Variable table:
+var_dict <- tribble(
+  ~Variable,        ~Type,      ~Definition,                                                        ~Role,
+  "runtimeMinutes", "integer",  "Duration of the movie in minutes",                                 "Independent variable",
+  "averageRating",  "double",   "Average IMDb user rating (0–10 scale, aggregated from user votes)", "Dependent variable",
+  "startYear",      "integer",  "Year the movie was released",                                      "Control variable")
+
+var_dict %>%
+  gt() %>%
+  tab_header(title = "Table 1. Variable Explanation") %>%
+  tab_options(column_labels.font.weight = "bold")
+```
+
+```{r}
+# Descriptive Statistics table:
+data_final <- title.basics %>%
+  select(tconst, runtimeMinutes, startYear) %>%
+  mutate(
+    runtimeMinutes = suppressWarnings(as.numeric(runtimeMinutes)),
+    startYear      = suppressWarnings(as.integer(startYear))
+  ) %>%
+  inner_join(
+    title.ratings %>% select(tconst, averageRating),
+    by = "tconst"
+  ) %>%
+  mutate(averageRating = as.numeric(averageRating))
+
+descriptives <- tibble(
+  Variable = c("runtimeMinutes","averageRating","startYear"),
+N        = c(sum(!is.na(data_final$runtimeMinutes)),
+               sum(!is.na(data_final$averageRating)),
+               sum(!is.na(data_final$startYear))),
+Missing  = c(sum(is.na(data_final$runtimeMinutes)),
+               sum(is.na(data_final$averageRating)),
+               sum(is.na(data_final$startYear))),
+Mean     = c(mean(data_final$runtimeMinutes, na.rm = TRUE),
+               mean(data_final$averageRating,  na.rm = TRUE),
+               mean(data_final$startYear,      na.rm = TRUE)),
+SD       = c(sd(data_final$runtimeMinutes, na.rm = TRUE),
+               sd(data_final$averageRating,  na.rm = TRUE),
+               sd(data_final$startYear,      na.rm = TRUE)),
+Min      = c(min(data_final$runtimeMinutes, na.rm = TRUE),
+               min(data_final$averageRating,  na.rm = TRUE),
+               min(data_final$startYear,      na.rm = TRUE)),
+Max      = c(max(data_final$runtimeMinutes, na.rm = TRUE),
+               max(data_final$averageRating,  na.rm = TRUE),
+               max(data_final$startYear,      na.rm = TRUE)))
+descriptives %>%
+  gt() %>%
+  tab_header(title = "Table 2. Descriptive Statistics") %>%
+  tab_options(column_labels.font.weight="bold")
+```
+
+```{r}
+# Data preparation point 2.2
+current_year <- 2025
+max_runtime  <- 300  
+
+
+to_na <- function(x) {
+  y <- as.character(x)
+  y[y %in% c("\\N", "N", "")] <- NA_character_
+  y
+}
+
+title.basics_clean <- title.basics %>%
+  mutate(
+    titleType      = to_na(titleType),
+    primaryTitle   = to_na(primaryTitle),
+    startYear      = to_na(startYear),
+    runtimeMinutes = to_na(runtimeMinutes)) %>% 
+  mutate(
+    startYear      = suppressWarnings(as.integer(startYear)),
+    runtimeMinutes = suppressWarnings(as.numeric(runtimeMinutes))) %>%
+
+  filter(titleType == "movie") %>%               
+  select(tconst, primaryTitle, startYear, runtimeMinutes) %>%
+  distinct(tconst, .keep_all = TRUE)
+title.ratings_clean <- title.ratings %>%
+  mutate(
+    averageRating = to_na(averageRating),
+    numVotes      = to_na(numVotes)) %>%
+  mutate(averageRating = as.numeric(averageRating),
+    numVotes      = as.integer(numVotes)) %>%
+  select(tconst, averageRating, numVotes) %>%
+  distinct(tconst, .keep_all = TRUE)
+
+
+
+movies_final <- title.basics_clean %>%
+  inner_join(title.ratings_clean, by = "tconst") %>%
+  
+  filter(!is.na(runtimeMinutes),
+         !is.na(averageRating),
+         !is.na(startYear)) %>%
+  
+  filter(runtimeMinutes > 0,
+         runtimeMinutes <= max_runtime) %>%
+  
+  filter(startYear <= current_year) %>%
+ 
+  rename(
+    title           = primaryTitle,
+    start_year      = startYear,
+    runtime_minutes = runtimeMinutes,
+    average_rating  = averageRating,
+    votes           = numVotes)
+```
+
+```{r}
+
+list(
+  n_rows = nrow(movies_final),
+  min_runtime = min(movies_final$runtime_minutes),
+  max_runtime = max(movies_final$runtime_minutes),
+  min_year = min(movies_final$start_year),
+  max_year = max(movies_final$start_year),
+  any_na = anyNA(movies_final[, c("runtime_minutes","average_rating","start_year")]))
+```
+
+```{r quick-metrics}
+fmt <- if (knitr::is_latex_output()) "latex" else "html"
+tibble(
+  metric = c("rows","min_runtime","max_runtime","min_year","max_year","any_na"),
+  value  = c(nrow(movies_final),
+             min(movies_final$runtime_minutes),
+             max(movies_final$runtime_minutes),
+             min(movies_final$start_year),
+             max(movies_final$start_year),
+             anyNA(movies_final[, c("runtime_minutes","average_rating","start_year")]))
+) |>
+  knitr::kable(format = fmt, caption = "Quick data checks") |>
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+
+```{r}
+movies_dt <- as.data.table(movies_final) 
+
+yearly_dt <- movies_dt[
+  , .(
+      n_movies    = .N,
+      avg_runtime = mean(runtime_minutes),
+      avg_rating  = mean(average_rating),
+      med_votes   = median(votes)
+    ),
+  by = start_year
+][order(start_year)]
+
+movies_dt[
+  , runtime_bin := cut(runtime_minutes, breaks = c(1, 90, 120, 150, 180, 300),
+                       right = TRUE, include.lowest = TRUE)
+]
+runtime_summary_dt <- movies_dt[
+  , .(
+      n = .N,
+      wmean_rating = weighted.mean(average_rating, w = pmax(votes, 1))
+    ),
+  by = runtime_bin
+][order(runtime_bin)]
+
+setkey(movies_dt, start_year)
+```
+
+```{r glance-tables}
+fmt <- if (knitr::is_latex_output()) "latex" else "html"
+
+cap1 <- if (knitr::is_latex_output()) "Preview: yearly\\_dt (first 10)" else "Preview: yearly_dt (first 10)"
+cap2 <- if (knitr::is_latex_output()) "Preview: runtime\\_summary\\_dt (first 10)" else "Preview: runtime_summary_dt (first 10)"
+
+knitr::kable(
+  head(yearly_dt, 10),
+  format  = fmt,
+  caption = cap1,
+  escape  = TRUE
+) |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+
+knitr::kable(
+  head(runtime_summary_dt, 10),
+  format  = fmt,
+  caption = cap2,
+  escape  = TRUE
+) |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+```
+
+
+```{r movies-by-year-table}
+fmt <- if (knitr::is_latex_output()) "latex" else "html"
+
+movies_final |>
+  count(start_year, name = "n_movies") |>
+  arrange(start_year) |>
+  knitr::kable(format = fmt, caption = "Number of movies by release year") |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+```
+
+```{r feat-engineering}
+movies_eng <- movies_final |>
+  mutate(
+    start_year   = as.integer(start_year),
+    decade       = 10 * (start_year %/% 10),
+    runtime_bin  = cut(runtime_minutes,
+                       breaks = c(0, 60, 90, 120, 150, Inf),
+                       labels = c("<=60","60–90","90–120","120–150",">150"),
+                       include.lowest = TRUE, right = TRUE),
+    log_votes    = log1p(votes)
+  )
+```
+
+```{r impute-missings}
+movies_eng <- movies_eng |>
+  group_by(start_year) |>
+  mutate(
+    runtime_imp        = ifelse(is.na(runtime_minutes),
+                                median(runtime_minutes, na.rm = TRUE),
+                                runtime_minutes),
+    average_rating_imp = ifelse(is.na(average_rating),
+                                median(average_rating, na.rm = TRUE),
+                                average_rating)
+  ) |>
+  ungroup()
+```
+
+```{r pivot-wide}
+movies_wide <- movies_eng |>
+  mutate(rating_bucket = cut(average_rating_imp,
+                             breaks = c(0,4,6,7,8,10),
+                             labels = c("<4","4–6","6–7","7–8",">=8"),
+                             include.lowest = TRUE)) |>
+  count(start_year, rating_bucket, name = "n") |>
+  tidyr::pivot_wider(names_from = rating_bucket, values_from = n, values_fill = 0)
+
+# Pretty preview (first 10 years)
+fmt <- if (knitr::is_latex_output()) "latex" else "html"
+knitr::kable(head(movies_wide, 10), format = fmt,
+             caption = "Movies per rating bucket by year (wide)") |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+```
+
+```{r yearly-agg-trend}
+yearly <- movies_eng |>
+  group_by(start_year) |>
+  summarise(
+    avg_rating  = mean(average_rating_imp, na.rm = TRUE),
+    avg_runtime = mean(runtime_imp, na.rm = TRUE),
+    n_movies    = n(),
+    .groups = "drop"
+  ) |>
+  arrange(start_year) |>
+  mutate(trend = row_number())
+```
+
+```{r eda-plot}
+movies_eng |>
+  filter(!is.na(runtime_imp), !is.na(average_rating_imp)) |>
+  ggplot(aes(x = runtime_imp, y = average_rating_imp)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Runtime vs. Rating",
+       x = "Runtime (minutes, imputed)",
+       y = "Average rating (imputed)")
+```
+
+```{r model}
+mod <- lm(average_rating_imp ~ runtime_imp + factor(start_year), data = movies_eng)
+broom::tidy(mod) |>
+  knitr::kable(format = if (knitr::is_latex_output()) "latex" else "html",
+               caption = "OLS: rating on runtime + year fixed effects") |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+```
+
+#Add interpretation here
