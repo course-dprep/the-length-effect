@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 library(data.table)
 library(dplyr)
 library(checkmate)
@@ -7,11 +6,15 @@ library(gt)
 library(tibble)   
 library(knitr)     
 library(kableExtra)
+library(readr)
+install.packages("checkmate")
+library(checkmate)
 
-title.basics <- readRDS("data/raw/title_basics.rds")
-title.ratings <- readRDS("data/raw/title_ratings.rds")
-
-# Summary of title.basics
+title.basics  <- read_csv("../../data/title.basics")
+title.ratings <- read_csv("../../data/title.ratings")
+title.basics_clean <- read_csv("../../gen/temp/title.basics_clean.csv")
+title.ratings_clean <- read_csv("../../gen/temp/title.ratings_clean.csv")
+# Summary of title.basics 
 
 dim(title.basics)     
 nrow(title.basics)      
@@ -40,6 +43,8 @@ knitr::kable(summary_tb1, caption = "Data size summary") |>
   kableExtra::kable_styling(full_width = FALSE,
                             bootstrap_options = c("striped","hover","condensed"))
 
+write_csv(summary_tb1, "gen/output/data_size_summary.csv")
+
 # checking the variable type
 str(title.basics)                 # compact overview
 dplyr::glimpse(title.basics)      # tidyverse overview
@@ -51,39 +56,7 @@ dplyr::glimpse(title.ratings)      # tidyverse overview
 sapply(title.ratings, class)       # class of each column
 sapply(title.ratings, typeof)      # storage type of each column
 
-=======
-ndt <- readRDS("data/processed/movies_prepared.rds")
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
-# changing character for numerical and change \N for NA
-to_na <- function(x) {
-  y <- as.character(x)
-  y[y %in% c("\\N", "N", "")] <- NA_character_
-  y
-}
-
-#Cleaning the titile.basics
-title.basics_clean <- title.basics %>%
-  mutate(
-    titleType      = to_na(titleType),
-    primaryTitle   = to_na(primaryTitle),
-    startYear      = to_na(startYear),
-    runtimeMinutes = to_na(runtimeMinutes)) %>% 
-  mutate(
-    startYear      = suppressWarnings(as.integer(startYear)),
-    runtimeMinutes = suppressWarnings(as.numeric(runtimeMinutes))) %>%
-  select(tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) %>%
-  distinct(tconst, .keep_all = TRUE)
-
-
-#Cleaning the title.ratings
-title.ratings_clean <- title.ratings %>%
-  mutate(
-    averageRating = to_na(averageRating),
-    numVotes      = to_na(numVotes)) %>%
-  mutate(averageRating = as.numeric(averageRating),
-         numVotes      = as.integer(numVotes)) %>%
-  select(tconst, averageRating, numVotes) %>%
-  distinct(tconst, .keep_all = TRUE)
+## NOT SURE WHAT THAT IS: ndt <- readRDS("data/processed/movies_prepared.rds")
 
 # Checking again the variable type correct
 str(title.basics_clean)                 # compact overview
@@ -103,34 +76,20 @@ var_dict %>%
   tab_header(title = "Table 1. Variable Explanation") %>%
   tab_options(column_labels.font.weight = "bold")
 
+write_csv(var_dict, "../../gen/output/variable_dictionary.csv")
 # checking outliers in averageRating - histogram
-
-ratings_clean <- dplyr::filter(title.ratings, !is.na(averageRating))
-
-ggplot(ratings_clean, aes(x = averageRating)) +
+ratings_clean_plot <- filter(title.ratings_clean, !is.na(averageRating))
+p <- ggplot(ratings_clean_plot, aes(x = averageRating)) +
   geom_histogram(binwidth = 0.25, color = "white", fill = "grey30", boundary = 0) +
   scale_x_continuous(limits = c(0, 10), breaks = 0:10) +
-  labs(x = "Average rating", y = "Count", title = "Average Rating IMDb") +
+  labs(x = "Average rating", y = "Count", title = "Distribution of IMDb Ratings") +
   theme_minimal(base_size = 14)
+ggsave("../../gen/output/ratings_histogram.png", p, width = 7, height = 4, dpi = 180)
 
-<<<<<<< HEAD
-=======
-install.packages("checkmate")   # run once in the Console
-library(checkmate)
-
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
 # allow NAs, but every non-NA must be within [0, 10]
 assert_numeric(
-  title.ratings$averageRating,
+  title.ratings_clean$averageRating,
   lower = 0, upper = 10,
   any.missing = TRUE,  # NAs allowed
   all.missing = FALSE  # not all NA
-<<<<<<< HEAD
 )
-
-dir.create("data/explore", recursive = TRUE, showWarnings = FALSE)
-saveRDS(title.basics_clean, file = "data/explore/title_basics_clean.rds")
-saveRDS(title.ratings_clean, file = "data/explore/title_ratings_clean.rds")
-=======
-)
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a

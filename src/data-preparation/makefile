@@ -1,18 +1,16 @@
-.PHONY: all clean
+DATA := ../../data
+TEMP := ../../gen/temp
 
-# paths relative to THIS file (we are in src/data-preparation)
-ROOT := ../..
-DATA := $(ROOT)/data
-TEMP := $(ROOT)/gen/temp
+.PHONY: all
+all: $(DATA)/title_basics.csv $(DATA)/title_ratings.csv
 
-# Build data-prep outputs from here
-all: $(TEMP)/aggregated_df.csv
-
-# Step 1: Download data (download.R is in THIS folder)
-$(DATA)/listings.csv $(DATA)/reviews.csv: download.R
-	Rscript -e "setwd('$(ROOT)'); dir.create('data', recursive = TRUE); source('src/data-preparation/download.R')"
-
-# Step 2: Clean data (clean.R is in THIS folder)
-$(TEMP)/aggregated_df.csv: clean.R $(DATA)/listings.csv $(DATA)/reviews.csv
-	Rscript -e "setwd('$(ROOT)'); dir.create('gen/temp', recursive = TRUE); source('src/data-preparation/clean.R')"
-
+#Step 1: Download data
+$(DATA)/title_basics.csv $(DATA)/title_ratings.csv: download_data.R
+	R -e "dir.create('$(DATA)')"
+	Rscript --vanilla download_data.R
+	
+#Step 2:Clean data
+$(TEMP)/title_basics_clean.csv: clean_data.R $(DATA)/title_basics.csv 
+$(TEMP)/title_ratings_clean.csv: clean_data.R $(DATA)/title_ratings.csv
+	R -e "dir.create('$(TEMP)', recursive = T)"
+	Rscript --vanilla clean_data.R

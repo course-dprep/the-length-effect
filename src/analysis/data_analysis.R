@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 library(data.table)
 library(dplyr)
 library(checkmate)
@@ -11,21 +10,14 @@ install.packages("contrib.url")
 
 movies_final_clean <- readRDS("data/processed/movies_prepared.rds")
 
-=======
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
 # Analysis, linear regression
-
 LR1 <- lm(average_rating ~ runtime_minutes + start_year, data = movies_final_clean)
 summary(LR1)
 
 install.packages(c("modelsummary", "sandwich", "lmtest", "broom"))
-<<<<<<< HEAD
-=======
 
 library(modelsummary)
 library(sandwich)
-
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
 m_lin <- lm(average_rating ~ runtime_minutes + start_year, data = movies_final_clean)
 VHC3 <- sandwich::vcovHC(m_lin, type = "HC3")
 
@@ -42,12 +34,7 @@ msummary(
   title = "OLS: Audience rating on runtime, controlling for release year (HC3 SE)"
 )
 
-<<<<<<< HEAD
-=======
-
 library(ggplot2)
-
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
 p1 <- ggplot(movies_final_clean, aes(x = runtime_minutes, y = average_rating)) +
   geom_point(alpha = 0.15) +
   geom_smooth(method = "lm", se = FALSE, color = "red") +
@@ -69,8 +56,6 @@ with(movies_final_clean, c(
   min_runtime = min(runtime_minutes, na.rm = TRUE),
   quantiles = paste(quantile(runtime_minutes, c(.01,.1,.25,.5,.75,.9,.99), na.rm=TRUE), collapse=", ")
 ))
-<<<<<<< HEAD
 
 dir.create("data/analysis", recursive = TRUE, showWarnings = FALSE)
-=======
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
+

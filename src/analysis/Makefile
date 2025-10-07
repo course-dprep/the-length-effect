@@ -1,3 +1,4 @@
+# !BELOW IS BILYANA MAKEFILE VERSION
 R=Rscript --vanilla
 S=src/analysis
 
@@ -34,3 +35,25 @@ prep:     data/processed/movies_prepared.rds
 # Clean generated files
 clean:
 	rm -f data/raw/*.rds data/explore/*.rds data/processed/*.rds
+
+## BILYANA MAKE - the content above belongs to data-preparation. Maybe revise?
+OUT  := ../../gen/output
+TEMP := ../../gen/temp
+
+.PHONY: all
+all: $(OUT)/ols_runtime_year.html $(OUT)/ratings_vs_runtime.png $(OUT)/ratings_vs_year.png $(OUT)/runtime_stats.txt
+
+# Primary target: the script writes ALL artifacts listed in 'all'
+$(OUT)/ols_runtime_year.html: modelling.R $(OUT)/movies_final_no_na.csv | $(OUT)
+	Rscript --vanilla modelling.R
+
+# Other artifacts just declare they depend on the primary output existing
+$(OUT)/ratings_vs_runtime.png: $(OUT)/ols_runtime_year.html
+	@true
+$(OUT)/ratings_vs_year.png: $(OUT)/ols_runtime_year.html
+	@true
+$(OUT)/runtime_stats.txt: $(OUT)/ols_runtime_year.html
+	@true
+
+$(OUT):
+	Rscript -e "dir.create('$(OUT)', recursive = TRUE)"
