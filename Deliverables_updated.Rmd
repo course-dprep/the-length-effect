@@ -305,7 +305,6 @@ ggplot(movies_final_clean, aes(x = runtime_minutes, y = average_rating)) +
   theme_minimal(base_size = 13)
 
 # Predicted relationship (controlling for release year)
-library(ggeffects)
 pred <- ggpredict(model_1, terms = "runtime_minutes [all]")
 
 ggplot(pred, aes(x = x, y = predicted)) +
