@@ -2,6 +2,7 @@
 library(data.table)
 ## Data Loading
 download_to_csv <- function(url, stem, out_dir = "../../data") {
+  dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
   dt <- fread(url, na.strings = "\\N", showProgress = FALSE)
   fwrite(dt, file.path(out_dir, paste0(stem, ".csv")))
   message("Saved: ", file.path(out_dir, paste0(stem, ".csv")))

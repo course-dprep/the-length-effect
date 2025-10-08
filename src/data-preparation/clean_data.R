@@ -1,14 +1,16 @@
 library(readr)
 library(dplyr)
 
+dir.create("../../gen/temp", recursive = TRUE, showWarnings = FALSE)
+
 to_na <- function(x) {
   y <- as.character(x)
   y[y %in% c("\\N", "N", "")] <- NA_character_
   y
 }
 
-title.basics  <- read_csv("../../data/title.basics")
-title.ratings <- read_csv("../../data/title.ratings")
+title.basics  <- read_csv("../../data/title.basics.csv")
+title.ratings <- read_csv("../../data/title.ratings.csv")
 
 title.basics_clean <- title.basics %>%
   select(tconst, titleType, primaryTitle, originalTitle,
@@ -24,4 +26,4 @@ title.ratings_clean <- title.ratings %>%
     distinct(tconst, .keep_all = TRUE)
 
 write_csv(title.basics_clean,"../../gen/temp/title.basics_clean.csv")
-write_csv(title.ratings_clean,"../..gen/temp/title.ratings_clean.csv")
+write_csv(title.ratings_clean,"../../gen/temp/title.ratings_clean.csv")
