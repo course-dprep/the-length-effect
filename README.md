@@ -90,6 +90,7 @@ Please follow the installation guides on <http://tilburgsciencehub.com/>.
     install.packages("lmtest")
     install.packages("ggeffects")
     ```
+    
 
 ## Running Instructions 
 
