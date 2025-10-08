@@ -43,18 +43,17 @@ Table: Table 2. Descriptive Statistics
 
 ## Method
 
-We estimate a linear regression (OLS) of average_rating on runtime_minutes, including start_year as a control. OLS is appropriate because the outcome is a continuous 0–10 mean rating, and we seek the average marginal effect of runtime. With our large sample, OLS delivers stable, easily interpretable coefficients in rating points per minute; we report HC3 robust standard errors to guard against heteroskedasticity and optionally include a quadratic term for runtime to allow non-linearity. The coefficient on runtime (or the derivative in the quadratic model) gives the expected change in rating for a one-minute increase holding release year constant, which directly answers our research question.
+We estimate a linear regression (OLS) of average_rating on runtime_minutes, including start_year as a control. OLS is appropriate because the outcome is a continuous 0–10 mean rating, and we seek the average marginal effect of runtime. With our large sample, OLS delivers stable, easily interpretable coefficients in rating points per minute; we use robust HC3 standard errors to correct for heteroskedasticity and additionally test a quadratic specification and a runtime × start_year interaction to capture possible non-linearity and time variation. The runtime coefficient (and, under interaction, the runtime plus interaction term) gives the expected change in rating for a one-minute increase holding other terms constant, which directly answers our research question.
 
 ## Preview of Findings 
 *Gist of your findings* 
-We found the coefficient of movie runtime is 0.0031 (p < 0.001), indicating a positive and significant effect associated with IMDb audience ratings, even after controlling for release year. In simple terms, it means that longer movies tend to receive slightly higher ratings on average.
+In the interaction model (average_rating ~ runtime_minutes * start_year), the runtime_minutes coefficient is 0.2475 (SE = 0.0070, p < 0.001) and the runtime_minutes × start_year coefficient is −0.0001231 (SE = 0.0000035, p < 0.001), indicating a positive association that weakens with later release years; start_year is 0.01310 (SE = 0.0003211, p < 0.001). Model fit: adjusted R² = 0.006543, N = 345,656, F-statistic = 759.8, p < 2.2e-16.
 
 *How our findings/product are deployed:*
-After cleaning the dataset we used the regression outputs to predict how runtime relates to audience reception. This analysis can be replicated or extended by adding variables such as genre or budget, and the visualizations we produced (e.g., runtime bins vs. ratings) can be used directly from specialists and academics in the field in their reports and presentations.
+After cleaning the dataset we used the regression outputs to predict and visualize how runtime relates to audience reception, including plots of observed vs. fitted relationships and predicted ratings by runtime. This analysis can be replicated or extended by adding variables such as genre or budget, and the visualizations we produced can be used directly by specialists and academics in reports and presentations.
 
 *Relevance of the findings/product:*
-Overall, our findings support the view that longer runtimes are positively associated with audience appreciation, consistent with the idea that extended durations may reflect higher production value, more complex storytelling, or stronger audience investment. However, given the relatively small effect size and potential genre-specific dynamics not accounted for in this analysis, caution is warranted in interpreting runtime as a direct driver of audience satisfaction. 
-
+Overall, the results show that longer runtimes are associated with slightly higher ratings, but the negative interaction with release year suggests the relationship is smaller for more recent films. Given the modest explanatory power and potential genre-specific dynamics not accounted for here, runtime should be viewed as one of several structural factors affecting audience satisfaction.
 
 ## Repository Overview 
 
