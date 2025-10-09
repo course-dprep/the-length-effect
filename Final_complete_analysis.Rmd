@@ -29,7 +29,7 @@ options(tidyverse.quiet = TRUE)
 ```{r packages}
 need_pkgs <- c(
   "tidyverse","data.table","readr","lubridate",
-  "knitr","kableExtra","broom", "ggeffects"
+  "knitr","kableExtra","broom", "ggeffects", "ggplot2"
 )
 
 # Optional (used only if you later add those features)
@@ -100,7 +100,7 @@ knitr::kable(data_size_summary, caption = "Data size summary") |>
 dplyr::glimpse(title.basics[, c("primaryTitle", "startYear", "runtimeMinutes")])
 sapply(title.basics[, c("primaryTitle", "startYear", "runtimeMinutes")], typeof)
 
-dplyr::glimpse(title_ratings[, "averageRating", drop = FALSE])
+dplyr::glimpse(title.ratings[, "averageRating", drop = FALSE])
 sapply(title.ratings[, "averageRating", drop = FALSE], typeof)
 ```
 
@@ -136,12 +136,12 @@ title.ratings_clean <- title.ratings %>%
 dplyr::glimpse(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")])
 sapply(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")], typeof)
 
-dplyr::glimpse(title_ratings_clean[, "averageRating", drop = FALSE])
+dplyr::glimpse(title.ratings_clean[, "averageRating", drop = FALSE])
 sapply(title.ratings_clean[, "averageRating", drop = FALSE], typeof)
 
 # Checking missing values
-colSums(is.na(title_basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")]))
-colSums(is.na(title_ratings_clean[, c("averageRating", "numVotes")]))
+colSums(is.na(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")]))
+colSums(is.na(title.ratings_clean[, c("averageRating", "numVotes")]))
 ```
 
 ```{r Data Exploration}
@@ -165,7 +165,7 @@ var_dict %>%
 summary(title.ratings_clean$averageRating)
 
 # Histogram of rating distribution (excluding missing values)
-title.ratings_clean <- dplyr::filter(title_ratings_clean, !is.na(averageRating))
+title.ratings_clean <- dplyr::filter(title.ratings_clean, !is.na(averageRating))
 
 ggplot(title.ratings_clean, aes(x = averageRating)) +
   geom_histogram(binwidth = 0.25, color = "white", fill = "grey30", boundary = 0) +

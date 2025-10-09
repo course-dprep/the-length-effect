@@ -27,5 +27,6 @@ $(OUT)/movies_final_clean.csv: merge_data.R  $(TEMP)/title.basics_filtered.csv $
 	Rscript --vanilla merge_data.R 
 	
 clean:
-    R -e "unlink('../../data', recursive = TRUE)"
-    R -e "unlink('../../gen/temp', recursive = TRUE)"
+	R -e "unlink('../../data', recursive = TRUE)"
+	R -e "unlink('../../gen/temp', recursive = TRUE)"
+	R -e "unlink('../../gen/out', recursive = TRUE)"
