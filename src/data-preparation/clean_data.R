@@ -1,29 +1,37 @@
-library(readr)
-library(dplyr)
+library(data.table)
 
+# каталог для вывода
 dir.create("../../gen/temp", recursive = TRUE, showWarnings = FALSE)
 
-to_na <- function(x) {
-  y <- as.character(x)
-  y[y %in% c("\\N", "N", "")] <- NA_character_
-  y
-}
+# читаем исходные CSV (учитываем коды пропусков IMDb)
+basics  <- fread("../../data/title.basics.csv",  na.strings = c("\\N","N",""))
+ratings <- fread("../../data/title.ratings.csv", na.strings = c("\\N","N",""))
 
-title.basics  <- read_csv("../../data/title.basics.csv")
-title.ratings <- read_csv("../../data/title.ratings.csv")
+# на всякий случай подчистим имена столбцов
+setnames(basics,  names(basics),  trimws(names(basics)))
+setnames(ratings, names(ratings), trimws(names(ratings)))
 
-title.basics_clean <- title.basics %>%
-  select(tconst, titleType, primaryTitle, originalTitle,
-         isAdult, startYear, endYear, runtimeMinutes, genres) %>%
-  mutate(startYear= as.integer(startYear),
-    runtimeMinutes = as.numeric(runtimeMinutes)) %>%
-    distinct(tconst, .keep_all = TRUE)
+# очистка title.basics
+basics_clean <- basics[
+  , .(tconst, titleType, primaryTitle, originalTitle,
+      isAdult, startYear, endYear, runtimeMinutes, genres)
+]
+basics_clean[, `:=`(
+  startYear      = as.integer(startYear),
+  runtimeMinutes = as.numeric(runtimeMinutes)
+)]
+setkey(basics_clean, tconst)
+basics_clean <- unique(basics_clean, by = "tconst")
 
-title.ratings_clean <- title.ratings %>%
-  select(tconst, averageRating, numVotes) %>%
-  mutate(averageRating = as.numeric(averageRating),
-    numVotes= as.integer(numVotes)) %>%
-    distinct(tconst, .keep_all = TRUE)
+# очистка title.ratings
+ratings_clean <- ratings[, .(tconst, averageRating, numVotes)]
+ratings_clean[, `:=`(
+  averageRating = as.numeric(averageRating),
+  numVotes      = as.integer(numVotes)
+)]
+setkey(ratings_clean, tconst)
+ratings_clean <- unique(ratings_clean, by = "tconst")
 
-write_csv(title.basics_clean,"../../gen/temp/title.basics_clean.csv")
-write_csv(title.ratings_clean,"../../gen/temp/title.ratings_clean.csv")
+# запись файлов
+fwrite(basics_clean,  "../../gen/temp/title.basics_clean.csv")
+fwrite(ratings_clean, "../../gen/temp/title.ratings_clean.csv")

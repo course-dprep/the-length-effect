@@ -1,50 +1,48 @@
-library(readr)
-library(dplyr)
+# src/data-preparation/merge_data.R
+library(data.table)
 
-title.basics_filtered <- read_csv("../../gen/temp/title.basics_filtered.csv")
-title.ratings_clean <- read_csv("../../gen/temp/title.ratings_clean.csv")
+# ensure output dir
+dir.create("../../gen/output", recursive = TRUE, showWarnings = FALSE)
 
-merged_data <- title.basics_filtered %>%
-  select(tconst, runtime_minutes, start_year, title) %>%
-  mutate(
-    runtime_minutes = (as.numeric(runtime_minutes)),
-    start_year      = (as.integer(start_year)),
-    title = (as.character(title))) %>%
-  inner_join(
-    title.ratings_clean %>% select(tconst, average_rating, votes),
-    by = "tconst") %>%
-  mutate(
-    average_rating = as.numeric(average_rating), 
-    votes= as.integer(votes)) 
+# --- Preferred path: use merged_data.csv produced at previous step ---
+if (file.exists("../../gen/temp/merged_data.csv")) {
+  merged <- fread("../../gen/temp/merged_data.csv", na.strings = c("\\N","N",""))
+  
+  # enforce types
+  merged[, `:=`(
+    start_year      = as.integer(start_year),
+    runtime_minutes = as.numeric(runtime_minutes),
+    average_rating  = as.numeric(average_rating),
+    votes           = as.integer(votes)
+  )]
+  
+} else {
+  # --- Fallback: rebuild merge from filtered/clean files ---
+  basics_filtered <- fread("../../gen/temp/title.basics_filtered.csv",
+                           na.strings = c("\\N","N",""))
+  ratings_clean   <- fread("../../gen/temp/title.ratings_clean.csv",
+                           na.strings = c("\\N","N",""))
+  
+  # align ratings column names
+  ratings_filtered <- ratings_clean[
+    , .(tconst,
+        average_rating = as.numeric(averageRating),
+        votes          = as.integer(numVotes))
+  ]
+  
+  setkey(basics_filtered, tconst)
+  setkey(ratings_filtered, tconst)
+  merged <- ratings_filtered[basics_filtered, nomatch = 0]
+  
+  merged <- merged[!is.na(average_rating) &
+                     !is.na(votes) &
+                     !is.na(runtime_minutes) &
+                     !is.na(start_year)]
+}
 
-write_csv(merged_data,"../../gen/temp/merged_data.csv")
+# Deduplicate by (title, start_year, runtime_minutes): keep max votes
+setorder(merged, title, start_year, runtime_minutes, -votes)
+movies_final_clean <- unique(merged, by = c("title","start_year","runtime_minutes"))
 
-# Drop duplicates -> highest votes per (title, year, runtime)
-keys <- c("title","start_year","runtime_minutes")
-
-dup_count <- sum(duplicated(select(merged_data, all_of(keys))))
-dup_count
-
-duplicated_movies <- merged_data %>%
-  mutate(is_duplicate = duplicated(select(., all_of(keys))) |
-           duplicated(select(., all_of(keys)), fromLast = TRUE)) %>%
-  filter(is_duplicate) %>%
-  select(title, start_year, runtime_minutes, average_rating, votes) %>%
-  arrange(title, start_year, runtime_minutes)
-
-# Count duplicate groups (titles that appear multiple times)
-duplicate_summary <- merged_data %>%
-  count(across(all_of(keys)), sort = TRUE) %>%
-  filter(n > 1) %>% slice_head(n = 20)
-duplicate_summary
-
-movies_deduplicated <- merged_data %>%
-  group_by(across(all_of(keys))) %>%
-  slice_max(votes, with_ties = FALSE) %>%  
-  ungroup()
-
-colSums(is.na(movies_deduplicated[, c("runtime_minutes", "average_rating", "start_year", "title")]))
-summary(movies_deduplicated)
-movies_final_clean <- movies_deduplicated
-
-write_csv(movies_final_clean, "../../gen/output/movies_final_clean.csv")
+# Write final dataset
+fwrite(movies_final_clean, "../../gen/output/movies_final_clean.csv")
