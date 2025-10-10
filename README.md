@@ -9,14 +9,6 @@ Empirical evidence on the relationship between movie duration and audience ratin
 
 Given that rating behaviour and audience preferences evolve over time (Amendola et al., 2015), we incorporate release year as a control variable to enhance internal validity and account for temporal dynamics in consumer behaviour. 
 
-*Academic Relevance*
-
-This research addresses an underexplored dimension of film evaluation. While previous research has mainly focused on factors such as actor performance (Liu et al., 2013), genre (Gupta et al., 2025), film directors (Antipov & Pokryshevskaya, 2016), and firm revenue (Zhang, 2025) as predictors of audience engagement, the impact of movie duration has often been relegated to the role of a control variable. Existing findings on the effect of movie duration remain unclear, some studies report a positive association between longer runtimes and audience ratings (Choudhary et al., 2024), others highlight that the effect varies across genres (Kaimann & Pannicke, 2015), and very few have explicitly examined potential nonlinear relationships such as optimal length or diminishing returns. By placing movie duration at the centre of the analysis, this study helps bridge the gap between audience reception and film economics, clarifying how structural characteristics of movies influence evaluation across different temporal contexts. Furthermore, by introducing the release year as a control variable it will help academics understand what is the impact over time. In doing so, the study adds to theoretical discussions in media consumption, film economics, and the attention economy by examining whether longer content is consistently perceived as more valuable or whether it risks undermining audience satisfaction.
-
-*Managerial Relevance*
-
-From a managerial perspective, the findings are of direct relevance to industry stakeholders such as producers, streaming platforms, and distributors. For film producers and studios, movie duration represents a strategic decision during production and editing that can influence both critical reception and audience satisfaction (Choudhary et al., 2024). Therefore, insights into its relationship with ratings can inform editing choices, guiding whether extended narratives enhance perceived quality or whether more concise formats maximize enjoyment. For streaming platforms, understanding the effect of runtime on ratings has implications for content acquisition, recommendation algorithms, and user engagement strategies. Similarly, distributors and marketers can benefit from these insights by tailoring campaigns to frame movie duration as a unique value proposition, positioning longer films as immersive experiences or shorter films as convenient and accessible entertainment.
-
 **Research Question**
 
 **To what extent does movie duration influence audience ratings, controlling for release year?**
