@@ -52,44 +52,28 @@ Longer films tend to receive slightly higher ratings, but this effect has weaken
 
 ## Repository Overview 
 
-if (!requireNamespace("fs", quietly = TRUE)) install.packages("fs")
-
-paths <- c(
-  "reporting/", "src/", ".gitignore", "README.md", "makefile", ".RDataTmp",
-  "reporting/Data_exploration.Rmd",
-  "reporting/Deliverable 4_updated.Rmd",
-  "reporting/Deliverables_updated.Rmd",
-  "reporting/Final_Paper.Rmd",
-  "reporting/Final_complete_analysis.Rmd",
-  "reporting/Data_Exploration_Report.pdf",
-  "src/analysis/", "src/data-preparation/",
-  "src/analysis/Makefile",
-  "src/analysis/data_analysis.R",
-  "src/analysis/data_exploration.R",
-  "src/analysis/lm_main_effect.R",
-  "src/data-preparation/clean_data.R",
-  "src/data-preparation/download_data.R",
-  "src/data-preparation/filter_data.R",
-  "src/data-preparation/merge_data.R",
-  "src/data-preparation/setup.R"
-)
-
-fs::dir_create(paths[grepl("/$", paths)])
-fs::file_create(setdiff(paths, paths[grepl("/$", paths)]))
-
-tree_txt <- fs::dir_tree(
-  path = ".",
-  recurse = 3,
-  all = TRUE,  # toon dotfiles zoals .gitignore en .RDataTmp
-  regexp = "^\\.git($|/)|^\\.Rproj\\.user($|/)|^renv($|/)|^__pycache__($|/)|\\.DS_Store$|\\.Rhistory$|\\.RData$|\\.pdf$",
-  invert = TRUE
-)
-
-if (!file.exists("README.md")) fs::file_create("README.md")
-cat("\n## Repository Overview\n\n```text\n",
-    paste(tree_txt, collapse = "\n"),
-    "\n```\n", file = "README.md", append = TRUE)
-
+├── .RDataTmp
+├── .gitignore
+├── README.md
+├── makefile
+├── reporting
+│   ├── Data_exploration.Rmd
+│   ├── Deliverable 4_updated.Rmd
+│   ├── Deliverables_updated.Rmd
+│   ├── Final_Paper.Rmd
+│   └── Final_complete_analysis.Rmd
+└── src
+    ├── analysis
+    │   ├── Makefile
+    │   ├── data_analysis.R
+    │   ├── data_exploration.R
+    │   └── lm_main_effect.R
+    └── data-preparation
+        ├── clean_data.R
+        ├── download_data.R
+        ├── filter_data.R
+        ├── merge_data.R
+        └── setup.R
 
 ## Dependencies 
 
@@ -248,6 +232,33 @@ src/data-preparation/setup.R
 ```
 
 <!-- TREE-END -->
+
+## Repository Overview
+
+```text
+ .RDataTmp
+.gitignore
+README.md
+makefile
+reporting
+reporting/Data_exploration.Rmd
+reporting/Deliverable 4_updated.Rmd
+reporting/Deliverables_updated.Rmd
+reporting/Final_Paper.Rmd
+reporting/Final_complete_analysis.Rmd
+src
+src/analysis
+src/analysis/Makefile
+src/analysis/data_analysis.R
+src/analysis/data_exploration.R
+src/analysis/lm_main_effect.R
+src/data-preparation
+src/data-preparation/clean_data.R
+src/data-preparation/download_data.R
+src/data-preparation/filter_data.R
+src/data-preparation/merge_data.R
+src/data-preparation/setup.R 
+```
 
 ## Repository Overview
 
