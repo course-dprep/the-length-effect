@@ -1,18 +1,23 @@
+# ---- paths bootstrap (must be at top) ----
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+root <- Sys.getenv("PROJECT_ROOT", unset = here::here())
+
+DATA_DIR <- file.path(root, "data")
+TEMP_DIR <- file.path(root, "gen", "temp")
+OUT_DIR  <- file.path(root, "gen", "output")
+
+dir.create(DATA_DIR, recursive = TRUE, showWarnings = FALSE)
+dir.create(TEMP_DIR, recursive = TRUE, showWarnings = FALSE)
+dir.create(OUT_DIR,  recursive = TRUE, showWarnings = FALSE)
+
+# ---- script logic ----
 library(data.table)
 
-# каталоги
-dir.create("../../gen/temp", recursive = TRUE, showWarnings = FALSE)
-
 # читаем очищенные файлы с прошлого шага
-basics_clean  <- fread("../../gen/temp/title.basics_clean.csv",
+basics_clean  <- fread(file.path(TEMP_DIR, "title.basics_clean.csv"),
                        na.strings = c("\\N","N",""))
-ratings_clean <- fread("../../gen/temp/title.ratings_clean.csv",
+ratings_clean <- fread(file.path(TEMP_DIR, "title.ratings_clean.csv"),
                        na.strings = c("\\N","N",""))
-
-# ожидемые имена:
-# basics_clean: tconst, titleType, primaryTitle, originalTitle, isAdult,
-#               startYear, endYear, runtimeMinutes, genres
-# ratings_clean: tconst, averageRating, numVotes
 
 # 1) фильтр по типу и разумным диапазонам
 basics_filtered <- basics_clean[
@@ -21,8 +26,8 @@ basics_filtered <- basics_clean[
     !is.na(startYear) & startYear <= 2025
 ][
   , .(tconst,
-      title        = as.character(primaryTitle),
-      start_year   = as.integer(startYear),
+      title           = as.character(primaryTitle),
+      start_year      = as.integer(startYear),
       runtime_minutes = as.numeric(runtimeMinutes))
 ]
 
@@ -48,7 +53,6 @@ merged <- merged[!is.na(average_rating) &
 setorder(merged, title, start_year, runtime_minutes, -votes)
 merged <- unique(merged, by = c("title","start_year","runtime_minutes"))
 
-# 6) если по пайплайну ещё нужен отдельный basics_filtered — сохраним его;
-#    иначе можно сразу писать merged. Здесь сохраним оба.
-fwrite(basics_filtered, "../../gen/temp/title.basics_filtered.csv")
-fwrite(merged,        "../../gen/temp/merged_data.csv")
+# 6) сохраняем артефакты шага
+fwrite(basics_filtered, file.path(TEMP_DIR, "title.basics_filtered.csv"))
+fwrite(merged,         file.path(TEMP_DIR, "merged_data.csv"))

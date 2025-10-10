@@ -1,11 +1,21 @@
+# ---- paths bootstrap (paste at very top) ----
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+root <- Sys.getenv("PROJECT_ROOT", unset = here::here())
+
+DATA_DIR <- file.path(root, "data")
+TEMP_DIR <- file.path(root, "gen", "temp")
+OUT_DIR  <- file.path(root, "gen", "output")
+
+dir.create(DATA_DIR, recursive = TRUE, showWarnings = FALSE)
+dir.create(TEMP_DIR, recursive = TRUE, showWarnings = FALSE)
+dir.create(OUT_DIR,  recursive = TRUE, showWarnings = FALSE)
+
+# ---- script logic ----
 library(data.table)
 
-# каталог для вывода
-dir.create("../../gen/temp", recursive = TRUE, showWarnings = FALSE)
-
 # читаем исходные CSV (учитываем коды пропусков IMDb)
-basics  <- fread("../../data/title.basics.csv",  na.strings = c("\\N","N",""))
-ratings <- fread("../../data/title.ratings.csv", na.strings = c("\\N","N",""))
+basics  <- fread(file.path(DATA_DIR, "title.basics.csv"),  na.strings = c("\\N","N",""))
+ratings <- fread(file.path(DATA_DIR, "title.ratings.csv"), na.strings = c("\\N","N",""))
 
 # на всякий случай подчистим имена столбцов
 setnames(basics,  names(basics),  trimws(names(basics)))
@@ -33,5 +43,5 @@ setkey(ratings_clean, tconst)
 ratings_clean <- unique(ratings_clean, by = "tconst")
 
 # запись файлов
-fwrite(basics_clean,  "../../gen/temp/title.basics_clean.csv")
-fwrite(ratings_clean, "../../gen/temp/title.ratings_clean.csv")
+fwrite(basics_clean,  file.path(TEMP_DIR, "title.basics_clean.csv"))
+fwrite(ratings_clean, file.path(TEMP_DIR, "title.ratings_clean.csv"))
