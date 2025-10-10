@@ -1,4 +1,5 @@
-ROOT := ../..
+SHELL := /usr/bin/sh
+ROOT  ?= ../..
 DATA := ../../data
 TEMP := ../../gen/temp
 OUT := ../../gen/output
