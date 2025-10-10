@@ -40,7 +40,7 @@ Only movies with complete information on runtime, release year, and IMDb rating 
 
 
 
-# **3.Data Preparation Summary**
+# **Data Preparation Summary**
 The data preparation process was conducted in R, using packages such as dplyr, tidyr, and ggplot2, and follows a structured, reproducible workflow designed to produce the cleaned dataset movies_final_clean.csv.
 
 The main steps include:
@@ -75,7 +75,7 @@ Intermediate model outputs, including predictions and confidence intervals, were
 
 
 
-# **4.Variable Description**
+# **Variable Description**
 | **Variable**                | **Description**                                         | **Data Type** |
 | --------------------------- | ------------------------------------------------------- | ------------- |
 | `title`                     | Official movie title as listed on IMDb                  | Character     |
