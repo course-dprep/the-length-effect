@@ -1,31 +1,22 @@
 # Introduction
-The purpose of this project is to examine whether and how movie length influences audience ratings, while controlling for release year. We aim to test if longer films are consistently perceived as higher quality or if extended runtimes risk diminishing audience engagement. By focusing directly on runtime rather than treating it as a side factor, we seek to establish a clear relationship between film length and ratings. This will allow us to identify whether there is an optimal duration for films and to understand how this relationship may have shifted over time.
+The purpose of this project is to examine whether and how movie length influences audience ratings, while controlling for release year. We test if longer films are consistently perceived as higher quality or if extended runtimes risk diminishing audience engagement. By focusing directly on runtime rather than treating it as a side factor, we aim to establish a clear relationship between film length and ratings. This allow us to identify whether there is an optimal duration for films and to understand how this relationship may have shifted over time.
 
 ## Motivation
 
-In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of individual ratings (Wallace et al., 1993). Runtime, frequently included as a control variable in prior research, also carries meaningful implications for audience perception (Ashari et al., 2022). A longer duration of the movie often reflects higher production value and suggests a narrative depth that justifies viewers’ time investment. However, excessive runtime may adversely affect enjoyment due to decreased audience attention and potential fatigue. 
+In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of ratings (Wallace et al., 1993). Runtime, often included merely as a control variable in prior research, also carries meaningful implications for audience perception (Ashari et al., 2022). A longer duration often reflects higher production value and suggests a narrative depth that justifies viewers’ time investment. However, excessive runtime may adversely affect enjoyment due to reduced audience attention and potential fatigue. 
 
-Empirical evidence on the relationship between movie duration and audience ratings remains inconclusive. Some studies identify a positive association, whereas others report a non-linear or genre specific effect. To address this gap, the current study investigates the influence of movie duration on audience ratings. 
+Empirical evidence on the relationship between movie duration and audience ratings remains inconclusive. Some studies identify a positive association, whereas others report a nonlinear or genre specific effect. To address this gap, the current study investigates the influence of movie duration on audience ratings. 
 
-Given that rating behaviour and audience preferences evolve over time (Amendola et al., 2015), we incorporate release year as a control variable to enhance the internal validity of our analysis and account for temporal dynamics in consumer behaviour. 
-
-*Academic relevance*
-
-This research addresses an underexplored dimension of firm evaluation. While previous research has mainly focused on factors such as actor performance (Liu et al., 2013), genre (Gupta et al., 2025), film directors (Antipov & Pokryshevskaya, 2016), and firm revenue (Zhang, 2025) as the main predictors of audience engagement, movie duration impact has often been relegated to the role of a control variable. Existing findings on the effect of movie duration remain unclear some studies report a positive association between longer runtimes and audience ratings (Choudhary et al., 2024), others highlight that the effect varies across genres (Kaimann & Pannicke, 2015), and very few have explicitly examined potential non-linear relationships such as optimal length or diminishing returns. By using the movie duration as a central variable in our analysis this study will bridge the gap between audience reception and film economics, clarifying how structural characteristics of movies influence evaluation across different temporal contexts. Furthermore, by introducing the release year as a controlling variable it will help academics understand what is the impact over time. In doing so, the study adds to theoretical discussions in media consumption, film economics, and the attention economy by examining whether longer content is consistently perceived as more valuable or whether it risks undermining audience satisfaction.
-
-*Managerial relevance*
-
-From a managerial perspective, the findings are of direct relevance to industry stakeholders such as producers, streaming platforms, and distributors. For film producers and studios, the movie duration represents a strategic decision during production and editing that can influence both critical reception and audience satisfaction (Choudhary et al., 2024). Therefore, insights into its relationship with ratings can inform editing choices, guiding whether extended narratives enhance perceived quality or whether more concise formats maximize enjoyment. For streaming platforms, understanding the effect of runtime on ratings has implications for content acquisition, recommendation algorithms, and user engagement strategies. Similarly, distributors and marketers can benefit from these insights by tailoring campaigns to frame the movie duration as a unique value proposition, positioning longer films as immersive experiences or shorter films as convenient and accessible entertainment.
+Given that rating behaviour and audience preferences evolve over time (Amendola et al., 2015), we incorporate release year as a control variable to enhance internal validity and account for temporal dynamics in consumer behaviour. 
 
 **Research Question**
 
 **To what extent does movie duration influence audience ratings, controlling for release year?**
 
 ## Data
-In this study, we use publicly available IMDb datasets: title.basics, containing metadata about movie titles (including release year and duration), and title.ratings, containing aggregate user ratings. The datasets are retrieved in TSV format from the IMDb website and merged using tconst. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year).
-After merging, cleaning, and aggregating, the datasets consist of 550203 observations. This reduction in the number of observations is due to the process of merging and cleaning the data. In particular, missing values were removed, films with unrealistic durations (0 minutes or longer than 300 minutes) were excluded, and films listed as released in 2026 (which probably do not yet have complete ratings) were omitted.
+In this study, we use publicly available IMDb datasets: title.basics, containing metadata about movie titles (including release year and duration), and title.ratings, containing aggregate user ratings. The datasets are retrieved in TSV format from the IMDb website and merged using tconst. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year). After cleaning, merging and deduplicating, the datasets consist of 345,777 observations. This reduction reflects filtering and merging steps: films with unrealistic durations (shorter than 40 minutes or longer than 300 minutes) were excluded, and 77 duplicates were resolved by keeping the title with the highest number of votes. The decision to include only movies longer than 40 minutes follows the AFI (American Film Institute) standards, which classify such works as feature films (Urbanora, 2010).
 
-Table: Table 1. Variable Explanation  
+Table 1: Variable Explanation  
 
 |Variable       |Type    |Definition                                                        |Role                 |
 |:--------------|:-------|:-----------------------------------------------------------------|:--------------------|
@@ -33,28 +24,31 @@ Table: Table 1. Variable Explanation
 |averageRating  |double  |Average IMDb user rating (0–10 scale, aggregated from user votes) |Dependent variable   |
 |startYear      |integer |Year the movie was released                                       |Control variable     |
 
-Table: Table 2. Descriptive Statistics  
+Table 2: Descriptive Statistics  
 
 |Variable       |       N| Missing|        Mean|          SD|  Min|     Max|
 |:--------------|-------:|-------:|-----------:|-----------:|----:|-------:|
-|runtimeMinutes | 1139904|  476842|   58.180547| 3459.738308|    0| 3692080|
-|averageRating  | 1616746|       0|    6.940669|    1.392759|    1|      10|
-|startYear      | 1616490|     256| 2004.399885|   21.198678| 1874|    2026|
+|runtimeMinutes |  345777|       0|   92.645589|    24.90015|   41|     300|
+|averageRating  |  345777|       0|    6.184049|     1.34776|    1|      10|
+|startYear      |  345777|       0| 1997.303375|    25.15304| 1894|    2025|
+
 
 ## Method
 
-We estimate a linear regression (OLS) of average_rating on runtime_minutes, including start_year as a control. OLS is appropriate because the outcome is a continuous 0–10 mean rating, and we seek the average marginal effect of runtime. With our large sample, OLS delivers stable, easily interpretable coefficients in rating points per minute; we report HC3 robust standard errors to guard against heteroskedasticity and optionally include a quadratic term for runtime to allow non-linearity. The coefficient on runtime (or the derivative in the quadratic model) gives the expected change in rating for a one-minute increase holding release year constant, which directly answers our research question.
+We estimated a series of Ordinary Least Squares (OLS) regressions to examine how runtime_minutes affects average_rating, controlling for start_year (release year).
+OLS is suitable since the dependent variable, average_rating, is a continuous 0–10 score, and we are interested in the average marginal effect of runtime on IMDb ratings. The baseline linear model provides interpretable coefficients in rating points per additional runtime minute.
+To ensure robustness and explore potential model improvements, we conducted additional testing through two model extensions. To perform our first check, we used Quadratic Specification, where we added a squared runtime term (runtime_minutes²) to test whether the relationship between runtime and rating is non-linear (e.g., whether ratings rise with runtime up to a point and then level off or decline). Secondly, we included the Interaction Model by introducing an interaction between runtime_minutes and start_year to test whether the effect of runtime varies across different release years, capturing potential time trends or changing audience preferences.
+As the final step, we visualised and compared the predicted values and fitted lines to compare the linear and quadratic models and to illustrate how runtime influences predicted IMDb ratings over time. This combination of baseline and additional tests lets us assess linearity and potential time-varying effects without changing the core OLS framework.
 
 ## Preview of Findings 
 *Gist of your findings* 
-We found the coefficient of movie runtime is 0.0031 (p < 0.001), indicating a positive and significant effect associated with IMDb audience ratings, even after controlling for release year. In simple terms, it means that longer movies tend to receive slightly higher ratings on average.
+In the interaction model (average_rating ~ runtime_minutes * start_year), the runtime_minutes coefficient is 0.2475 (SE = 0.0070, p < 0.001) and the runtime_minutes × start_year coefficient is −0.0001231 (SE = 0.0000035, p < 0.001), indicating a positive association that weakens with later release years; start_year is 0.01310 (SE = 0.0003211, p < 0.001). Model fit: adjusted R² = 0.006543, N = 345,656, F-statistic = 759.8, p < 2.2e-16.
 
 *How our findings/product are deployed:*
-After cleaning the dataset we used the regression outputs to predict how runtime relates to audience reception. This analysis can be replicated or extended by adding variables such as genre or budget, and the visualizations we produced (e.g., runtime bins vs. ratings) can be used directly from specialists and academics in the field in their reports and presentations.
+After cleaning the dataset we used the regression outputs to predict and visualize how runtime relates to audience reception, including plots of observed vs. fitted relationships and predicted ratings by runtime. This analysis can be replicated or extended by adding variables such as genre or budget, and the visualizations can be used directly by specialists and academics in reports and presentations.
 
 *Relevance of the findings/product:*
-Overall, our findings support the view that longer runtimes are positively associated with audience appreciation, consistent with the idea that extended durations may reflect higher production value, more complex storytelling, or stronger audience investment. However, given the relatively small effect size and potential genre-specific dynamics not accounted for in this analysis, caution is warranted in interpreting runtime as a direct driver of audience satisfaction. 
-
+Overall, the results show that longer runtimes are associated with slightly higher ratings, but the negative interaction with release year suggests the relationship is smaller for more recent films. Given the modest explanatory power and potential genre-specific dynamics not accounted for here, runtime should be viewed as one of several structural factors affecting audience satisfaction.
 
 ## Repository Overview 
 
@@ -89,7 +83,9 @@ Please follow the installation guides on <http://tilburgsciencehub.com/>.
     install.packages("modelsummary")
     install.packages("sandwich")
     install.packages("lmtest")
+    install.packages("ggeffects")
     ```
+    
 
 ## Running Instructions 
 
@@ -124,3 +120,23 @@ The project is implemented by team 4, consisting of the following members:
 - [Thomas van den Dungen](https://github.com/ThomasvandenDungen), e-mail: [t.e.n.vdndungen@tilburguniversity.edu](mailto:t.e.n.vdndungen@tilburguniversity.edu)
 
 
+## References
+Amendola, L., Marra, V., & Quartin, M. (2015). The evolving perception of controversial movies. Palgrave Communications, 1(1). https://doi.org/10.1057/palcomms.2015.38 
+
+Antipov, E. A., & Pokryshevskaya, E. B. (2016). How to measure the power of actors and film directors? Empirical Studies of the Arts, 34(2), 147–159. https://doi.org/10.1177/0276237416628904
+
+Ashari, I. F., Banjarnahor, R., Farida, D. R., Aisyah, S. P., Dewi, A. P., & Humaya, N. (2022, 14 juli). Application of Data Mining with the K-Means Clustering Method and Davies Bouldin Index for Grouping IMDB Movies. Journal Of Applied Informatics And Computing. Geraadpleegd op 4 september 2025, van https://jurnal.polibatam.ac.id/index.php/JAIC/article/view/3485 
+
+Choudhary, T., Chakraborty, T., Arun, D. P., Goyal, N., & Singla, S. (2024). Ratings and Factor Affecting Across Genres: A Study from Entertainment Industry. SSRN Electronic Journal. https://doi.org/10.2139/ssrn.4502176
+
+Gupta, S., Adhikari, U., Varshney, S., & Choudhury, T. (2025). Computational analysis of genre effects on movie ratings using MLP algorithms. Journal of Computer Science, 21(4), 905–917. https://doi.org/10.3844/jcssp.2025.905.917
+
+Kaimann, D., & Pannicke, J. (2015). Movie success in a genre specific contest: Evidence from the US film industry. https://hdl.handle.net/10419/142323
+
+Liu, A. X., Liu, Y., & Mazumdar, T. (2013, August). Star Power in the Eye of the Beholder: A Study of the Influence of Stars in the Movie Industry. Marketing Letters, 1-12. SSRN. https://ssrn.com/abstract=2655797
+
+Urbanora. (2010, September 19). AFI Catalog Silent Film database. The Bioscope. https://thebioscope.net/2010/09/19/afi-catalog-silent-film-database/
+
+Wallace, W. T., Seigerman, A., & Holbrook, M. B. (1993). The role of actors and actresses in the success of films: how much is a movie star worth? Journal Of Cultural Economics, 17(1), 1–27. https://doi.org/10.1007/bf00820765 
+
+Zhang, H. (2025). Analysis of business factors influencing film revenue. Advances in Economics Management and Political Sciences, 166(1), 1–7. https://doi.org/10.54254/2754-1169/2025.20876 
