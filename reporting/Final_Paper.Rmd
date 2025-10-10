@@ -1,0 +1,145 @@
+---
+title: "Final_Paper:The Length Effect: Investigating How Movie Runtime Influences Audience Ratings"
+output:  pdf_document
+---
+
+**This project investigates how movie length affects audience ratings, controlling for release year, to determine whether longer films are perceived as higher quality or risk lower engagement over time.**
+
+# 1. Research Motivation
+In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of individual ratings (Wallace et al., 1993). Runtime, frequently included as a control variable in prior research, also carries meaningful implications for audience perception (Ashari et al., 2022). A longer duration of the movie often reflects higher production value and suggests a narrative depth that justifies viewers’ time investment. However, excessive runtime may adversely affect enjoyment due to decreased audience attention and potential fatigue.
+
+Empirical evidence on the relationship between movie duration and audience ratings remains inconclusive. Some studies identify a positive association, whereas others report a non-linear or genre specific effect. To address this gap, the current study investigates the influence of movie duration on audience ratings.
+
+Given that rating behaviour and audience preferences evolve over time (Amendola et al., 2015), we incorporate release year as a control variable to enhance the internal validity of our analysis and account for temporal dynamics in consumer behaviour.
+
+# 2. Research Question
+**To what extent does movie duration influence audience ratings, controlling for release year??**
+
+# 3. Relevance
+
+## 3.1 Academic relevance
+This research addresses an underexplored dimension of firm evaluation. While previous research has mainly focused on factors such as actor performance (Liu et al., 2013), genre (Gupta et al., 2025), film directors (Antipov & Pokryshevskaya, 2016), and firm revenue (Zhang, 2025) as the main predictors of audience engagement, movie duration impact has often been relegated to the role of a control variable. Existing findings on the effect of movie duration remain unclear some studies report a positive association between longer runtimes and audience ratings (Choudhary et al., 2024), others highlight that the effect varies across genres (Kaimann & Pannicke, 2015), and very few have explicitly examined potential non-linear relationships such as optimal length or diminishing returns. By using the movie duration as a central variable in our analysis this study will bridge the gap between audience reception and film economics, clarifying how structural characteristics of movies influence evaluation across different temporal contexts. Furthermore, by introducing the release year as a controlling variable it will help academics understand what is the impact over time. In doing so, the study adds to theoretical discussions in media consumption, film economics, and the attention economy by examining whether longer content is consistently perceived as more valuable or whether it risks undermining audience satisfaction.
+
+## 3.2 Managerial relevance
+From a managerial perspective, the findings are of direct relevance to industry stakeholders such as producers, streaming platforms, and distributors. For film producers and studios, the movie duration represents a strategic decision during production and editing that can influence both critical reception and audience satisfaction (Choudhary et al., 2024). Therefore, insights into its relationship with ratings can inform editing choices, guiding whether extended narratives enhance perceived quality or whether more concise formats maximize enjoyment. For streaming platforms, understanding the effect of runtime on ratings has implications for content acquisition, recommendation algorithms, and user engagement strategies. Similarly, distributors and marketers can benefit from these insights by tailoring campaigns to frame the movie duration as a unique value proposition, positioning longer films as immersive experiences or shorter films as convenient and accessible entertainment.
+
+# 4. Data
+
+## 4.1 Data Sourcing
+This project uses two data sets obtained from the [Public IMDb DatasetS](https://datasets.imdbws.com/). One dataset contains basic information about each title, including its type, release year, runtime, and genres, while the other provides audience-related data, such as the average IMDb rating and the total number of user votes for each title.
+
+## 4.2 Data Preparation and Variables
+. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year). After merging, cleaning, and deduplicating, the datasets consist of 345,656 observations. An overview of these variables is provided below.
+
+Table: Table 1. Variable Explanation  
+
+|Variable       |Type    |Definition                                                        |Role                 |
+|:--------------|:-------|:-----------------------------------------------------------------|:--------------------|
+|runtimeMinutes |integer |Duration of the movie in minutes                                  |Independent variable |
+|averageRating  |double  |Average IMDb user rating (0–10 scale, aggregated from user votes) |Dependent variable   |
+|startYear      |integer |Year the movie was released                                       |Control variable     |
+
+# 5. Data Exploration
+Before conducting the analysis, it is essential to gain a comprehensive understanding of the dataset to identify its characteristics, patterns, and potential limitations.
+
+The data contains 29,374 movie observations, each including measures of average IMDb rating (on a 1–10 scale), runtime in minutes, release year, and genre classification. The mean rating is approximately 6.9, suggesting a generally positive audience perception, while the average runtime is around 58 minutes.Titles with unrealistic durations (missing, shorter than 40 minutes, or longer than 300 minutes) were excluded to maintain consistency and focus on feature-length films, following the American Film Institute (AFI) definition of a feature film (Urbanora, 2010). The mean rating is approximately 6.94, indicating a generally positive audience perception, while the average number of votes per title is around 1,021, revealing significant variation in viewer engagement. Runtimes are right-skewed, with most films falling within moderate lengths and a smaller number being exceptionally long. This indicates that, although the large dataset provide reliability, the size and interpretation of effects should be interpreted considering real-world context in mind.
+
+Additional data exploration and visualizations conducted using ggplot2 are documented in the data_exploration.R file.
+
+# 6. Method
+This project employs linear regression analysis as the primary research method, chosen for its suitability in examining the relationship between movie runtime and audience ratings while controlling for potential confounding variables such as release year. This approach allows for clear interpretation of how film length influences perceived quality across different time periods.
+
+To address the research question, a series of linear regression models were estimated. First, a simple linear regression model was used to establish a baseline understanding of the relationship between a movie’s runtime (in minutes) and its average IMDb rating.
+
+The baseline model is specified as follows:
+
+$Ratings=β0​+β1​(Runtime)+ε$
+
+Second, a multiple linear regression model was developed to account for additional explanatory factors and isolate the unique effect of runtime. Specifically, release year was included as a control variable to account for temporal shifts in audience preferences and rating behavior.
+
+The extended model is formally specified as:
+
+$Ratings=β0+β1(Runtime)+β 2(ReleaseYear)+ε$
+
+Finally, to explore whether the relationship between runtime and ratings has evolved over time, an interaction term between runtime and release year was introduced. This allows the analysis to test whether the effect of runtime differs for movies released in different periods.
+
+The interaction model is expressed as:
+
+$Ratings=β0​+β1​(Runtime)+β2​(ReleaseYear)+β3​(Runtime*ReleaseYear)+ε$
+
+# 7. Analysis
+
+## 7.1 Main Model
+To examine whether movie runtime continues to influence audience ratings when accounting for temporal effects, a multiple linear regression model was estimated. The dependent variable is the average IMDb rating, while the independent variables include runtime (in minutes) and release year as a control. This specification expands upon the baseline model by isolating the unique contribution of runtime while controlling for changes in audience preferences and rating behavior over time.
+
+The output of the regression is presented below:
+```{r main_effect_output, echo=FALSE, out.width='100%'}
+knitr::include_graphics("../../paper/output/Final_result_lm.png")
+```
+
+### Model Interpretation:
+The results show that both runtime ($β = 0.0017, p < .001$) and release year ($β = 0.0023, p < .001$) have positive and highly significant relationships with IMDb ratings. This suggests that, on average, longer films tend to receive slightly higher ratings, and newer movies are rated marginally better than older ones. However, the explanatory power of the model remains very low ($R² = 0.003$), indicating that these two variables together explain only a small portion of the variance in audience ratings. Thus, while statistically significant due to the large sample size, the practical effect of runtime on perceived quality is limited.
+
+## 7.2 Quadratic Model
+To explore whether the relationship between runtime and ratings is non-linear, a quadratic regression model was estimated. This model adds a squared term for runtime, allowing for the possibility that excessively long films may receive lower ratings, even if moderate-length films are well-received.
+
+The output of the quadratic model is presented below:
+```{r linear_vs_quadratic, echo=FALSE, out.width='100%'}
+knitr::include_graphics("../../paper/output/Linear_vs_Quadratic_Fit.png")
+```
+
+### Model Interpretation:
+The quadratic model confirms a non-linear relationship between runtime and IMDb ratings. The coefficient for runtime ($β₁ = -0.0223, p < .001$) is negative, while the coefficient for its squared term ($β₂ = 0.00011, p < .001$) is positive. This pattern indicates that ratings initially increase with runtime up to a certain point, after which the effect flattens or slightly declines. The inclusion of the quadratic term improves the model fit ($R² = 0.017$), showing a stronger explanatory power than the baseline model, though still modest in absolute terms.
+
+## 7.3 Interaction Model
+Lastly, to test whether the relationship between runtime and ratings changes over time, an interaction model was estimated. This model includes an interaction term between runtime and release year, allowing the effect of runtime to vary across different time periods.
+```{r interaction_model, echo = FALSE, out.width='100%'}
+knitr::include_graphics("../../paper/output/Predicted_model.pdf")
+```
+
+## 7.4 Overview of Findings and Managerial Recommendations
+Across all three models, the findings consistently demonstrate that movie runtime has a statistically significant but modest effect on audience ratings. The baseline model shows a small positive association between runtime and IMDb ratings, indicating that longer films generally receive slightly higher ratings. This aligns with the notion that extended runtimes may be associated with higher production value or more developed storytelling, which viewers tend to reward with better evaluations.
+
+When release year is added in the multiple regression model, both runtime and release year remain positive and significant predictors of audience ratings. This suggests that not only do longer films tend to score higher, but newer movies also receive slightly better ratings on average—possibly reflecting improvements in production quality, storytelling techniques, or shifting viewer expectations over time.
+
+The quadratic model provides further nuance by revealing a non-linear relationship between runtime and ratings. Ratings increase with runtime up to an optimal point, after which the effect plateaus or declines slightly. This implies that while audiences appreciate films with enough length to develop depth and complexity, excessively long movies may reduce engagement or satisfaction.
+
+Finally, the interaction model shows that the positive impact of runtime on ratings has weakened over time. In earlier decades, longer films were consistently rated higher, but in more recent years, this advantage has diminished. Modern audiences appear less inclined to equate runtime with quality, possibly due to shorter attention spans or changing entertainment consumption habits.
+
+Taken together, these findings highlight important strategic insights for film producers, distributors, and streaming platforms:
+- Optimize film length to balance narrative depth and audience engagement—around moderate runtimes where ratings peak.
+- Consider evolving audience preferences when planning releases; contemporary viewers may favor concise, well-paced storytelling over extended runtimes.
+- Use runtime strategically in marketing and categorization, as audience expectations for long vs. short films differ across genres and time periods.
+
+# 8. Conclusion
+This project investigated the relationship between movie runtime and audience ratings on IMDb, while controlling for release year. The analysis shows that runtime influences ratings, but the effect is small and context-dependent. Moderate-length films tend to perform best, while excessively long movies see diminishing returns. Furthermore, the positive link between length and rating has declined in more recent years, suggesting that viewers today prioritize pacing, storytelling quality, and entertainment value over duration alone.
+
+From an industry perspective, these results suggest that filmmakers and studios should focus less on producing longer films as a proxy for quality and instead emphasize effective narrative structure, editing, and engagement. For streaming services, understanding this shift may help in curating recommendations and optimizing content length for modern viewing behavior.
+
+Overall, this study contributes to understanding how film characteristics shape audience perception, providing an empirical foundation for future research on content features and viewer engagement in the evolving media landscape.
+
+# 9. Limitations and Future Research
+While the models identify clear relationships between runtime and ratings, several limitations should be acknowledged. The analysis is correlational rather than causal, meaning that higher-rated films might also attract longer runtimes due to production budgets or artistic ambition, not necessarily because of duration itself. Additionally, other factors such as genre, cast, budget, popularity, and marketing were not controlled for, potentially influencing the observed effects. 
+
+Future research could address these limitations by incorporating genre-specific models, exploring runtime effects within streaming versus theatrical releases, or analyzing viewer engagement metrics such as completion rates or review text sentiment. Moreover, non-linear and machine learning models could further clarify complex interactions between movie attributes and audience ratings, offering deeper insights into what drives modern film success.
+
+# References:
+Amendola, L., Marra, V., & Quartin, M. (2015). The evolving perception of controversial movies. Palgrave Communications, 1(1). https://doi.org/10.1057/palcomms.2015.38
+
+Antipov, E. A., & Pokryshevskaya, E. B. (2016). How to measure the power of actors and film directors? Empirical Studies of the Arts, 34(2), 147–159. https://doi.org/10.1177/0276237416628904
+
+Ashari, I. F., Banjarnahor, R., Farida, D. R., Aisyah, S. P., Dewi, A. P., & Humaya, N. (2022, 14 juli). Application of Data Mining with the K-Means Clustering Method and Davies Bouldin Index for Grouping IMDB Movies. Journal Of Applied Informatics And Computing. Geraadpleegd op 4 september 2025, van https://jurnal.polibatam.ac.id/index.php/JAIC/article/view/3485
+
+Choudhary, T., Chakraborty, T., Arun, D. P., Goyal, N., & Singla, S. (2024). Ratings and Factor Affecting Across Genres: A Study from Entertainment Industry. SSRN Electronic Journal. https://doi.org/10.2139/ssrn.4502176
+
+Gupta, S., Adhikari, U., Varshney, S., & Choudhury, T. (2025). Computational analysis of genre effects on movie ratings using MLP algorithms. Journal of Computer Science, 21(4), 905–917. https://doi.org/10.3844/jcssp.2025.905.917
+
+Kaimann, D., & Pannicke, J. (2015). Movie success in a genre specific contest: Evidence from the US film industry. https://hdl.handle.net/10419/142323
+
+Liu, A. X., Liu, Y., & Mazumdar, T. (2013, August). Star Power in the Eye of the Beholder: A Study of the Influence of Stars in the Movie Industry. Marketing Letters, 1-12. SSRN. https://ssrn.com/abstract=2655797
+
+Urbanora. (2010, September 19). AFI Catalog Silent Film database. The Bioscope. https://thebioscope.net/2010/09/19/afi-catalog-silent-film-database/
+
+Wallace, W. T., Seigerman, A., & Holbrook, M. B. (1993). The role of actors and actresses in the success of films: how much is a movie star worth? Journal Of Cultural Economics, 17(1), 1–27. https://doi.org/10.1007/bf00820765
+
+Zhang, H. (2025). Analysis of business factors influencing film revenue. Advances in Economics Management and Political Sciences, 166(1), 1–7. https://doi.org/10.54254/2754-1169/2025.20876
