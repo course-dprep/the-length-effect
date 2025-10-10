@@ -1,7 +1,7 @@
 ifeq ($(OS),Windows_NT)
-  SHELL := /usr/bin/sh    # Git Bash / RTools on Windows
+  SHELL := /usr/bin/sh    
 else
-  SHELL := /bin/sh        # macOS/Linux
+  SHELL := /bin/sh       
 endif
 
 ROOT  ?= .
