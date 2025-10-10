@@ -115,3 +115,17 @@ The project is implemented by team 4, consisting of the following members:
 - [Jekaterina Rakute](https://github.com/raakute), e-mail: [j.rakute@tilburguniversity.edu](mailto:j.rakute@tilburguniversity.edu) 
 - [Simona Borisova](https://github.com/borisova-simona), e-mail: [s.borisova@tilburguniversity.edu](mailto:s.borisova@tilburguniversity.edu)
 - [Thomas van den Dungen](https://github.com/ThomasvandenDungen), e-mail: [t.e.n.vdndungen@tilburguniversity.edu](mailto:t.e.n.vdndungen@tilburguniversity.edu)
+
+
+## References
+Amendola, L., Marra, V., & Quartin, M. (2015). The evolving perception of controversial movies. Palgrave Communications, 1(1). https://doi.org/10.1057/palcomms.2015.38 
+Antipov, E. A., & Pokryshevskaya, E. B. (2016). How to measure the power of actors and film directors? Empirical Studies of the Arts, 34(2), 147–159. https://doi.org/10.1177/0276237416628904
+Ashari, I. F., Banjarnahor, R., Farida, D. R., Aisyah, S. P., Dewi, A. P., & Humaya, N. (2022, 14 juli). Application of Data Mining with the K-Means Clustering Method and Davies Bouldin Index for Grouping IMDB Movies. Journal Of Applied Informatics And Computing. Geraadpleegd op 4 september 2025, van https://jurnal.polibatam.ac.id/index.php/JAIC/article/view/3485 
+Choudhary, T., Chakraborty, T., Arun, D. P., Goyal, N., & Singla, S. (2024). Ratings and Factor Affecting Across Genres: A Study from Entertainment Industry. SSRN Electronic Journal. https://doi.org/10.2139/ssrn.4502176
+Gupta, S., Adhikari, U., Varshney, S., & Choudhury, T. (2025). Computational analysis of genre effects on movie ratings using MLP algorithms. Journal of Computer Science, 21(4), 905–917. https://doi.org/10.3844/jcssp.2025.905.917
+Kaimann, D., & Pannicke, J. (2015). Movie success in a genre specific contest: Evidence from the US film industry. https://hdl.handle.net/10419/142323
+Liu, A. X., Liu, Y., & Mazumdar, T. (2013, August). Star Power in the Eye of the Beholder: A Study of the Influence of Stars in the Movie Industry. Marketing Letters, 1-12. SSRN. https://ssrn.com/abstract=2655797
+Urbanora. (2010, September 19). AFI Catalog Silent Film database. The Bioscope. https://thebioscope.net/2010/09/19/afi-catalog-silent-film-database/
+Urbanora. (2010, September 19). AFI Catalog Silent Film database. The Bioscope. https://thebioscope.net/2010/09/19/afi-catalog-silent-film-database/
+Wallace, W. T., Seigerman, A., & Holbrook, M. B. (1993). The role of actors and actresses in the success of films: how much is a movie star worth? Journal Of Cultural Economics, 17(1), 1–27. https://doi.org/10.1007/bf00820765 
+Zhang, H. (2025). Analysis of business factors influencing film revenue. Advances in Economics Management and Political Sciences, 166(1), 1–7. https://doi.org/10.54254/2754-1169/2025.20876 
