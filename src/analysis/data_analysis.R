@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 library(data.table)
 library(dplyr)
 library(checkmate)
@@ -7,70 +6,52 @@ library(gt)
 library(tibble)   
 library(knitr)     
 library(kableExtra)
-install.packages("contrib.url")
-
-movies_final_clean <- readRDS("data/processed/movies_prepared.rds")
-
-=======
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
-# Analysis, linear regression
-
-LR1 <- lm(average_rating ~ runtime_minutes + start_year, data = movies_final_clean)
-summary(LR1)
-
 install.packages(c("modelsummary", "sandwich", "lmtest", "broom"))
-<<<<<<< HEAD
-=======
-
 library(modelsummary)
 library(sandwich)
 
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
-m_lin <- lm(average_rating ~ runtime_minutes + start_year, data = movies_final_clean)
-VHC3 <- sandwich::vcovHC(m_lin, type = "HC3")
+# Load the dataset
+model_1 <- read_csv("../../src/analysis/model_1.csv")
+movies_final_clean <- read_csv("../../gen/output/movies_final_clean.csv")
+out_dir <- "../../paper/output"
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-msummary(
-  m_lin,
-  vcov = VHC3,
-  stars = TRUE,
-  coef_map = c(
-    "(Intercept)"    = "Intercept",
-    "runtime_minutes" = "Runtime (minutes)",
-    "start_year"      = "Release year"
-  ),
-  gof_omit = "IC|AIC|BIC",
-  title = "OLS: Audience rating on runtime, controlling for release year (HC3 SE)"
-)
+# Predicted relationship (controlling for release year)
+pred <- ggpredict(model_1, terms = "runtime_minutes [all]")
 
-<<<<<<< HEAD
-=======
+ggplot(pred, aes(x = x, y = predicted)) +
+  geom_line(color = "#1A5276", size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), fill = "#5DADE2", alpha = 0.2) +
+  labs(
+    title = "Predicted IMDb Rating vs Runtime",
+    subtitle = "Controlling for release year",
+    x = "Runtime (minutes)",
+    y = "Predicted IMDb Rating"
+  ) +
+  theme_minimal(base_size = 13)
+ggsave(file.path(out_dir, "Predicted_model.pdf"), p1, width = 7, height = 4, dpi = 180)
 
-library(ggplot2)
 
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
-p1 <- ggplot(movies_final_clean, aes(x = runtime_minutes, y = average_rating)) +
-  geom_point(alpha = 0.15) +
-  geom_smooth(method = "lm", se = FALSE, color = "red") +
-  labs(title = "Ratings vs Runtime", x = "Runtime (minutes)", y = "Average rating") +
-  theme_minimal(base_size = 12)
-p1
+# Quadratic Model 
+model_quad <- lm(average_rating ~ runtime_minutes + I(runtime_minutes^2) + start_year,
+                 data = movies_final_clean)
+summary(model_quad)
 
-p2 <- ggplot(movies_final_clean, aes(x = start_year, y = average_rating)) +
-  geom_point(alpha = 0.15) +
-  geom_smooth(method = "lm", se = FALSE, color = "red") +
-  labs(title = "Ratings vs Release Year", x = "Release year", y = "Average rating") +
-  theme_minimal(base_size = 12)
-p2
+ggplot(movies_final_clean, aes(x = runtime_minutes, y = average_rating)) +
+  geom_point(alpha = 0.2, color = "#AED6F1") +
+  geom_smooth(method = "lm", formula = y ~ x, color = "#1A5276", se = FALSE, size = 1.1) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), color = "#E74C3C", se = FALSE, size = 1.1) +
+  coord_cartesian(xlim = c(40, 250), ylim = c(0, 10)) +
+  labs(
+    title = "Linear vs Quadratic Fit: Runtime and IMDb Rating",
+    x = "Runtime (minutes)",
+    y = "Average IMDb Rating",
+    caption = "Blue = linear model; Red = quadratic model (within observed data range)") +
+  theme_minimal(base_size =13)
+ggsave(file.path(out_dir, "Linear vs Quadratic Fit.pdf"), p1, width = 7, height = 4, dpi = 180)
 
-# On the exact data you used for the plot:
-with(movies_final_clean, c(
-  n_total = length(runtime_minutes),
-  n_lt100 = sum(runtime_minutes < 100, na.rm = TRUE),
-  min_runtime = min(runtime_minutes, na.rm = TRUE),
-  quantiles = paste(quantile(runtime_minutes, c(.01,.1,.25,.5,.75,.9,.99), na.rm=TRUE), collapse=", ")
-))
-<<<<<<< HEAD
+#Robustness Check - interaction with release year
+model_2 <- lm(average_rating ~ runtime_minutes * start_year, data = movies_final_clean)
+summary(model_2)
 
-dir.create("data/analysis", recursive = TRUE, showWarnings = FALSE)
-=======
->>>>>>> 4e70e76bedb224093d77f30f0c9f1941ca94080a
+write_csv(model_2, "../../src/analysis/model_2.csv")

@@ -1,0 +1,142 @@
+---
+title: "Data_exploration"
+output: pdf-output
+date: "2025-10-10"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data loading 
+
+```{r Data loading}
+## Data Loading
+
+# Load IMDb title.basics data
+title.basics <- fread("https://datasets.imdbws.com/title.basics.tsv.gz")
+
+# Load IMDb title.ratings data
+title.ratings <- fread("https://datasets.imdbws.com/title.ratings.tsv.gz")
+```
+
+## Data exploration
+## Raw Data
+```{r - Data Exploration - #1}
+## Initial data overview
+
+# Summary of title.basics
+dim(title.basics)     
+nrow(title.basics)      
+ncol(title.basics)       
+colnames(title.basics) 
+str(title.basics)      
+summary(title.basics)   
+head(title.basics, 10)
+
+# Summary of title.ratings
+dim(title.ratings)     
+nrow(title.ratings)      
+ncol(title.ratings)       
+colnames(title.ratings) 
+str(title.ratings)      
+summary(title.ratings)   
+head(title.ratings, 10)
+```
+
+```{r Data Exploration - #2}
+# Complete summary title.basics & title.ratings
+data_size_summary <- tibble::tibble(
+  dataset = c("title.basics","title.ratings"),
+  n_rows  = c(nrow(title.basics), nrow(title.ratings)),
+  n_cols  = c(ncol(title.basics), ncol(title.ratings)))
+
+knitr::kable(data_size_summary, caption = "Data size summary") |>
+  kableExtra::kable_styling(full_width = FALSE,
+                            bootstrap_options = c("striped","hover","condensed"))
+```
+
+```{r Data Exploration - #3}
+# Checking variable type
+dplyr::glimpse(title.basics[, c("primaryTitle", "startYear", "runtimeMinutes")])
+sapply(title.basics[, c("primaryTitle", "startYear", "runtimeMinutes")], typeof)
+
+dplyr::glimpse(title.ratings[, "averageRating", drop = FALSE])
+sapply(title.ratings[, "averageRating", drop = FALSE], typeof)
+```
+
+## Modeling the datasets 
+```{r Data Preparation create the new datasets}
+# Replace "\N" and "" with NA
+to_na <- function(x) {
+  y <- as.character(x)
+  y[y %in% c("\\N", "N", "")] <- NA_character_
+  y
+}
+
+# Cleaning the titile.basics dataset
+title.basics_clean <- title.basics %>%
+  mutate(across(c(titleType, primaryTitle, startYear, runtimeMinutes), to_na)) %>%
+  mutate(startYear = suppressWarnings(as.integer(startYear)),
+    runtimeMinutes = suppressWarnings(as.numeric(runtimeMinutes))) %>%
+  select(tconst, titleType, primaryTitle, originalTitle, isAdult,
+         startYear, endYear, runtimeMinutes, genres) %>%
+  distinct(tconst, .keep_all = TRUE)
+
+# Cleaning the title.ratings dataset
+title.ratings_clean <- title.ratings %>%
+  mutate(across(c(averageRating, numVotes), to_na)) %>%
+  mutate(averageRating = as.numeric(averageRating),
+    numVotes = as.integer(numVotes)) %>%
+  select(tconst, averageRating, numVotes) %>%
+  distinct(tconst, .keep_all = TRUE)
+```
+
+```{r Data Exploration - #1}
+# Verification of variable types after the cleaning
+dplyr::glimpse(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")])
+sapply(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")], typeof)
+
+dplyr::glimpse(title.ratings_clean[, "averageRating", drop = FALSE])
+sapply(title.ratings_clean[, "averageRating", drop = FALSE], typeof)
+
+# Checking missing values
+colSums(is.na(title.basics_clean[, c("primaryTitle", "startYear", "runtimeMinutes")]))
+colSums(is.na(title.ratings_clean[, c("averageRating", "numVotes")]))
+```
+
+```{r Data Exploration - #2}
+# Variable table:
+var_dict <- tribble(
+  ~Variable,  ~Class, ~Definition, ~Role,
+  "runtimeMinutes", "numeric",  "Duration of the movie in minutes", "Independent variable",
+  "averageRating",  "numeric",   "Average IMDb user rating (0–10 scale, aggregated from user votes)", "Dependent variable",
+  "startYear",      "numeric",  "Year the movie was released", "Control variable")
+
+var_dict %>%
+  gt() %>%
+  tab_header(title = "Table 1. Variable Explanation") %>%
+  tab_options(column_labels.font.weight = "bold")
+```
+
+```{r Data Exploration}
+### Checking for outliers in IMDb ratings
+
+# Numeric summary of average ratings
+summary(title.ratings_clean$averageRating)
+
+# Histogram of rating distribution (excluding missing values)
+title.ratings_clean <- dplyr::filter(title.ratings_clean, !is.na(averageRating))
+
+ggplot(title.ratings_clean, aes(x = averageRating)) +
+  geom_histogram(binwidth = 0.25, color = "white", fill = "grey30", boundary = 0) +
+  scale_x_continuous(limits = c(0, 10), breaks = 0:10) +
+  labs(
+    x = "Average rating",
+    y = "Count",
+    title = "Distribution of IMDb Ratings"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
