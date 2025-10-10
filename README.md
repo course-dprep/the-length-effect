@@ -35,7 +35,10 @@ Table 2: Descriptive Statistics
 
 ## Method
 
-We estimate a linear regression (OLS) of average_rating on runtime_minutes, including start_year as a control. OLS is appropriate because the outcome is a continuous 0–10 mean rating, and we seek the average marginal effect of runtime. With our large sample, OLS delivers stable, easily interpretable coefficients in rating points per minute; we use robust HC3 standard errors to correct for heteroskedasticity and additionally test a quadratic specification and a runtime × start_year interaction to capture possible non-linearity and time variation. The runtime coefficient (and, under interaction, the runtime plus interaction term) gives the expected change in rating for a one-minute increase holding other terms constant, which directly answers our research question.
+We estimated a series of Ordinary Least Squares (OLS) regressions to examine how runtime_minutes affects average_rating, controlling for start_year (release year).
+OLS is suitable since the dependent variable, average_rating, is a continuous 0–10 score, and we are interested in the average marginal effect of runtime on IMDb ratings. The baseline linear model provides interpretable coefficients in rating points per additional runtime minute.
+To ensure robustness and explore potential model improvements, we conducted additional testing through two model extensions. To perform our first check, we used Quadratic Specification, where we added a squared runtime term (runtime_minutes²) to test whether the relationship between runtime and rating is non-linear (e.g., whether ratings rise with runtime up to a point and then level off or decline). Secondly, we included the Interaction Model by introducing an interaction between runtime_minutes and start_year to test whether the effect of runtime varies across different release years, capturing potential time trends or changing audience preferences.
+As the final step, we visualised and compared the predicted values and fitted lines to compare the linear and quadratic models and to illustrate how runtime influences predicted IMDb ratings over time. This combination of baseline and additional tests lets us assess linearity and potential time-varying effects without changing the core OLS framework.
 
 ## Preview of Findings 
 *Gist of your findings* 
