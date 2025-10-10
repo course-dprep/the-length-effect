@@ -44,10 +44,10 @@ As the final step, we visualised and compared the predicted values and fitted li
 *Gist of your findings* 
 In the interaction model, runtime has a small but significant positive effect on IMDb ratings (b = 0.2475, p < .001), while the negative interaction with release year (b = –0.00012, p < .001) indicates that this relationship weakens for more recent films. The quadratic specification confirms a slight nonlinearity: very short and very long films tend to receive higher ratings, though the overall explanatory power remains modest (adjusted R² ≈ 0.017).
 
-*How our findings/product are deployed:*
+*How our findings are deployed:*
 After cleaning and merging the dataset, we used regression outputs to visualize how runtime relates to audience ratings, controlling for release year. These visualizations can be extended with additional predictors such as genre or budget.
 
-*Relevance of the findings/product:*
+*Relevance of the findings:*
 Longer films tend to receive slightly higher ratings, but this effect has weakened in recent years. This may indicate changing viewer habits and possibly less tolerance for longer film lengths.
 
 ## Repository Overview 
@@ -70,7 +70,7 @@ Please follow the installation guides on <http://tilburgsciencehub.com/>.
     install.packages("broom")
     install.packages("gt")
     install.packages("ggplot2")
-    install.packages("dplyr")i w
+    install.packages("dplyr")
     install.packages("tidyr")
     install.packages("tibble")
     install.packages("modelsummary")
