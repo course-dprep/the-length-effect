@@ -1,0 +1,159 @@
+---
+title: "Final_Paper:The Impact of Photos on Restaurant Ratings"
+output:
+  pdf_document:
+    toc: true
+    latex_engine: xelatex
+    keep_tex:  true
+---
+
+**This project investigates how movie length affects audience ratings, controlling for release year, to determine whether longer films are perceived as higher quality or risk lower engagement over time.**
+
+# 1. Research Motivation
+In evaluating audience reception of films, factors such as actor performance, genre, and budget have been extensively studied as significant predictors of individual ratings (Wallace et al., 1993). Runtime, frequently included as a control variable in prior research, also carries meaningful implications for audience perception (Ashari et al., 2022). A longer duration of the movie often reflects higher production value and suggests a narrative depth that justifies viewers’ time investment. However, excessive runtime may adversely affect enjoyment due to decreased audience attention and potential fatigue.
+
+Empirical evidence on the relationship between movie duration and audience ratings remains inconclusive. Some studies identify a positive association, whereas others report a non-linear or genre specific effect. To address this gap, the current study investigates the influence of movie duration on audience ratings.
+
+Given that rating behaviour and audience preferences evolve over time (Amendola et al., 2015), we incorporate release year as a control variable to enhance the internal validity of our analysis and account for temporal dynamics in consumer behaviour.
+
+# 2. Research Question
+**To what extent does movie duration influence audience ratings, controlling for release year??**
+
+# 3. Relevance
+
+## 3.1 Academic relevance
+This research addresses an underexplored dimension of firm evaluation. While previous research has mainly focused on factors such as actor performance (Liu et al., 2013), genre (Gupta et al., 2025), film directors (Antipov & Pokryshevskaya, 2016), and firm revenue (Zhang, 2025) as the main predictors of audience engagement, movie duration impact has often been relegated to the role of a control variable. Existing findings on the effect of movie duration remain unclear some studies report a positive association between longer runtimes and audience ratings (Choudhary et al., 2024), others highlight that the effect varies across genres (Kaimann & Pannicke, 2015), and very few have explicitly examined potential non-linear relationships such as optimal length or diminishing returns. By using the movie duration as a central variable in our analysis this study will bridge the gap between audience reception and film economics, clarifying how structural characteristics of movies influence evaluation across different temporal contexts. Furthermore, by introducing the release year as a controlling variable it will help academics understand what is the impact over time. In doing so, the study adds to theoretical discussions in media consumption, film economics, and the attention economy by examining whether longer content is consistently perceived as more valuable or whether it risks undermining audience satisfaction.
+
+## 3.2 Managerial relevance
+From a managerial perspective, the findings are of direct relevance to industry stakeholders such as producers, streaming platforms, and distributors. For film producers and studios, the movie duration represents a strategic decision during production and editing that can influence both critical reception and audience satisfaction (Choudhary et al., 2024). Therefore, insights into its relationship with ratings can inform editing choices, guiding whether extended narratives enhance perceived quality or whether more concise formats maximize enjoyment. For streaming platforms, understanding the effect of runtime on ratings has implications for content acquisition, recommendation algorithms, and user engagement strategies. Similarly, distributors and marketers can benefit from these insights by tailoring campaigns to frame the movie duration as a unique value proposition, positioning longer films as immersive experiences or shorter films as convenient and accessible entertainment.
+
+# 4. Data
+
+## 4.1 Data Sourcing
+This project uses two data sets obtained from the [Public IMDb DatasetS](https://datasets.imdbws.com/). One dataset contains basic information about each title, including its type, release year, runtime, and genres, while the other provides audience-related data, such as the average IMDb rating and the total number of user votes for each title.
+
+## 4.2 Data Preparation and Variables
+. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year). After merging, cleaning, and deduplicating, the datasets consist of 345,656 observations. An overview of these variables is provided below.
+
+Table: Table 1. Variable Explanation  
+
+|Variable       |Type    |Definition                                                        |Role                 |
+|:--------------|:-------|:-----------------------------------------------------------------|:--------------------|
+|runtimeMinutes |integer |Duration of the movie in minutes                                  |Independent variable |
+|averageRating  |double  |Average IMDb user rating (0–10 scale, aggregated from user votes) |Dependent variable   |
+|startYear      |integer |Year the movie was released                                       |Control variable     |
+
+# 5. Data Exploration
+Before conducting the analysis, it is essential to gain a comprehensive understanding of the dataset to identify its characteristics, patterns, and potential limitations.
+
+The data contains 29,374 movie observations, each including measures of average IMDb rating (on a 1–10 scale), runtime in minutes, release year, and genre classification. The mean rating is approximately 6.9, suggesting a generally positive audience perception, while the average runtime is around 58 minutes.Titles with unrealistic durations (missing, shorter than 40 minutes, or longer than 300 minutes) were excluded to maintain consistency and focus on feature-length films, following the American Film Institute (AFI) definition of a feature film (Urbanora, 2010). The mean rating is approximately 6.94, indicating a generally positive audience perception, while the average number of votes per title is around 1,021, revealing significant variation in viewer engagement. Runtimes are right-skewed, with most films falling within moderate lengths and a smaller number being exceptionally long. This indicates that, although the large dataset provide reliability, the size and interpretation of effects should be interpreted considering real-world context in mind.
+
+Additional data exploration and visualizations conducted using ggplot2 are documented in the data_exploration.R file.
+
+# 6. Method
+This project employs linear regression analysis as the primary research method, chosen for its suitability in examining the relationship between movie runtime and audience ratings while controlling for potential confounding variables such as release year. This approach allows for clear interpretation of how film length influences perceived quality across different time periods.
+
+To address the research question, a series of linear regression models were estimated. First, a simple linear regression model was used to establish a baseline understanding of the relationship between a movie’s runtime (in minutes) and its average IMDb rating.
+
+The baseline model is specified as follows:
+
+$Ratings=β0​+β1​(Runtime)+ε$
+
+Second, a multiple linear regression model was developed to account for additional explanatory factors and isolate the unique effect of runtime. Specifically, release year was included as a control variable to account for temporal shifts in audience preferences and rating behavior.
+
+The extended model is formally specified as:
+
+$Ratings=β0+β1(Runtime)+β 2(ReleaseYear)+ε$
+
+Finally, to explore whether the relationship between runtime and ratings has evolved over time, an interaction term between runtime and release year was introduced. This allows the analysis to test whether the effect of runtime differs for movies released in different periods.
+
+The interaction model is expressed as:
+
+$Ratings=β0​+β1​(Runtime)+β2​(ReleaseYear)+β3​(Runtime*ReleaseYear)+ε$
+
+# 7. Analysis
+
+## 7.1 Baseline Model
+To gain an initial understanding of the relationship between movie runtime and audience ratings, a baseline linear regression model was estimated. This model serves as a starting point for examining whether longer films tend to receive higher or lower average IMDb ratings, without yet accounting for additional factors such as release year. The output of the baseline regression model is presented below:
+
+```{r main_effect_plot, echo=FALSE, out.width='80%', fig.align='center', fig.pos='H'}
+knitr::include_graphics("../paper/output/Final_result_lm.png")
+```
+
+### Model Interpretation
+The coefficient for Total Photos is positive and highly significant ($β = 0.0097, p < .001$), indicating that restaurants with more photos tend to receive slightly higher average ratings. More specifically, each additional photo uploaded to a restaurant’s Yelp page is associated with a 0.0097 point increase in its average star rating. In practical terms, an increase of 50 photos corresponds to approximately +0.48 stars on the 1–5 rating scale.
+
+**Explanatory Power:**
+The model’s explanatory power is very low ($R² = 0.015$), indicating that photo quantity alone explains only a small fraction of the variation in ratings. Most of the variation in ratings is driven by other factors (food quality, service, price, location, etc.), not simply by the number of photos. Thus, while the relationship is statistically overwhelming due to the sample size, the actual effect in practice is quite small.
+
+Despite this limited explanatory power, the positive relationship aligns with theoretical expectations that photos in online reviews help consumers better evaluate restaurants, reducing perceived risk and increasing confidence in their decision-making, which in turn influences average ratings.
+
+## 7.2 Main Model
+To examine whether movie runtime continues to influence audience ratings when accounting for temporal effects, a multiple linear regression model was estimated. The dependent variable is the average IMDb rating, while the independent variables include runtime (in minutes) and release year as a control. This specification expands upon the baseline model by isolating the unique contribution of runtime while controlling for changes in audience preferences and rating behavior over time.
+
+The output of the regression is presented below:
+```{r main_effect_output, echo=FALSE, out.width='100%'}
+knitr::include_graphics("../../paper/output/Final_result_lm.png")
+```
+
+### Model Interpretation:
+When controlling for all photo categories, menu photos exhibit the strongest positive association with average ratings. Specifically, each additional menu photo is associated with a 0.13-star increase, holding the number of environment and food & drink photos constant. Environment photos also show a positive effect, though smaller in magnitude, with each additional photo contributing approximately +0.022 stars. In contrast, food & drink photos do not have a statistically significant effect, suggesting that once menu and environment photos are accounted for, additional images of food provide little incremental predictive value.
+
+These results suggest different functional roles for each photo type:
+- Menu photos likely reduce informational uncertainty, allowing consumers to evaluate prices, portion sizes, and offerings before visiting, which increases confidence and trust.
+- Environment photos convey restaurant atmosphere and cleanliness, shaping emotional expectations.
+- Food photos, though abundant in the data set, may suffer from saturation and variable quality, explaining their negligible incremental impact.
+
+**Explanatory Power:**
+The inclusion of photo types as moderators increases the model’s explanatory power to $R² = 0.023$, representing almost a 50% improvement over the baseline model. While the overall explained variance remains small, the findings from this model indicate that photo type carries meaningful information beyond quantity.
+
+## 7.3 Interaction Model
+To assess whether the effect of photo volume on ratings varies by the predominant type of photo, an interaction model was estimated, introducing interaction terms between the total number of photos and the dominant photo category. This specification allows testing whether the slope of the relationship between total photos and star ratings differs across food-, menu-, and environment-dominant restaurants, rather than assuming a uniform effect.
+
+```{r model_central_moderation, echo=FALSE, out.width='100%'}
+knitr::include_graphics("../gen/output/model_central_moderation.png") 
+```
+
+### Model Interpretation:
+For environment-dominant restaurants (the reference group) with an average number of photos (5.8), the expected star rating is 3.74. Each additional photo above the mean, for restaurants where environmental photos is the dominant group, is associated with a small but statistically significant increase in rating of 0.0082 (p < 0.001), consistent with the baseline finding that more photos slightly raise ratings.
+The model further indicates that restaurants dominated by food and drink photos have lower average ratings than environment-dominant restaurants ($−0.176 stars, p < 0.001$), while menu-dominant restaurants show a small positive difference (+0.165 stars), though this is not statistically significant ($p = 0.130$).
+
+The interaction terms indicate that the effect of additional photos differs by photo type. For food & drink-dominant restaurants, each extra photo contributes an additional 0.0027 to the star rating beyond the effect for environment-dominant restaurants ($p = 0.0096$), suggesting a slightly stronger positive relationship. For menu-dominant restaurants, each extra photo adds 0.027 points compared to environment-dominant restaurants, but this effect is not significant $(p = 0.266$), indicating that photo quantity does not meaningfully alter ratings in this category.
+
+**Explanatory Power:**
+The model explains approximately 2.6% of the variance in star ratings ($R² = 0.026$) and is statistically significant. While modest, this shows that both the number and type of photos contribute meaningfully to predicting ratings. The low R² also highlights that many other factors, such as food quality, service, and pricing, likely influence ratings beyond what is captured by visual content.
+
+## 7.4 Overview of Findings and Managerial Recommendations
+Across all three models, the findings consistently demonstrate that the total number of photos on Yelp has a significant effect on average restaurant ratings. The baseline model establishes that restaurants with more photos tend to receive higher average ratings, supporting the idea that visual information enhances perceived credibility and reduces consumer uncertainty.
+
+When investigating photo type, the results reveal that not all photos contribute equally. Menu photos have the strongest positive relationship with ratings, suggesting that they help customers form realistic expectations about offerings and prices. Environment photos also contribute positively, likely because they signal cleanliness, atmosphere, and other attributes that shape expectations before a visit. By contrast, food photos appear less influential once other types are controlled for, possibly due to oversaturation or inconsistent quality.
+
+The interaction model further refines these insights by showing that while the overall photo–rating relationship is robust across categories, the strength of the effect varies slightly depending on which type of photo dominates a restaurant’s gallery. Food-dominant restaurants start with lower ratings but benefit more from increasing photo volume, whereas menu-dominant restaurants start higher but do not gain additional advantage from extra photos.
+
+Taken together, the findings suggest that managers should can implement strategies to improve perceived reputation and attract potential customers. Practical steps include:
+- Encouraging customers to upload diverse photos, especially of menus and interiors.
+- Prompting visual engagement through in-store QR codes, receipts, or social media campaigns.
+- Monitoring photo composition over time to maintain a balanced gallery that aligns with brand positioning.
+
+
+# 8. Conclusion
+This project investigated the relationship between the number and type of photos in Yelp reviews and restaurants’ average star ratings. The analysis demonstrates that photos play a meaningful role in influencing ratings, but their impact varies by content category. Menu and environment photos are most influential, while food and drink photos alone have limited effect.
+
+From a managerial perspective, these findings provide actionable guidance for restaurants seeking to enhance their online reputation. Encouraging customers to upload specific types of photos through incentives or prompts can increase perceived quality, foster trust, and ultimately improve ratings. For review platforms such as Yelp, incorporating photo type alongside quantity into recommendation algorithms could improve the accuracy and relevance of suggestions for users.
+
+Overall, this study highlights the value of user-generated visual content in online reviews and its role in shaping consumer decision-making, providing both practical insights for businesses and a foundation for further research on visual eWOM in the restaurant industry.
+
+# 9. Limitations and Future Research
+While the models identify significant relationships between photo characteristics and Yelp ratings, several limitations remain.The analysis is correlational, not causal, which means restaurants with higher ratings may simply attract more photos. Moreover, unobserved factors such as location, price level, cuisine, and review text sentiment were not controlled for, potentially biasing estimates. Lastly, the linear specification also assumes constant effects across photo volumes, which may overlook diminishing returns.
+Future research could incorporate elements such as photo quality,or sentiment to better capture how photos truly shape consumer perceptions over time.
+
+# References:
+Li, C., Kwok, L., Xie, K. L., Liu, J., & Ye, Q. (2021). Let Photos Speak: The Effect of User-Generated Visual Content on Hotel Review Helpfulness. Journal of Hospitality & Tourism Research, 47(4), 109634802110191. https://doi.org/10.1177/10963480211019113
+
+Luca, M. (2016). Reviews, Reputation, and Revenue: The Case of Yelp.com. Harvard Business School NOM Unit Working Paper, 12(016). https://doi.org/10.2139/ssrn.1928601
+
+Parikh, A., Behnke, C., Vorvoreanu, M., Almanza, B., & Nelson, D. (2014). Motives for reading and articulating user-generated restaurant reviews on Yelp.com. Journal of Hospitality and Tourism Technology, 5(2), 160–176. https://doi.org/10.1108/jhtt-04-2013-0011
+
+Wang, Y., Kim, J., & Kim, J. (2021). The financial impact of online customer reviews in the restaurant industry: A moderating effect of brand equity. International Journal of Hospitality Management, 95, 102895. https://doi.org/10.1016/j.ijhm.2021.102895
+
+Weisskopf, D. J.-P. (2018, September 30). Online Customer Reviews: Their Impact on Restaurants. Hospitalityinsights.ehl.edu. https://hospitalityinsights.ehl.edu/online-customer-reviews-restaurants
