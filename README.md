@@ -165,3 +165,27 @@ Urbanora. (2010, September 19). AFI Catalog Silent Film database. The Bioscope. 
 Wallace, W. T., Seigerman, A., & Holbrook, M. B. (1993). The role of actors and actresses in the success of films: how much is a movie star worth? Journal Of Cultural Economics, 17(1), 1–27. https://doi.org/10.1007/bf00820765 
 
 Zhang, H. (2025). Analysis of business factors influencing film revenue. Advances in Economics Management and Political Sciences, 166(1), 1–7. https://doi.org/10.54254/2754-1169/2025.20876 
+## Repository Overview
+
+```text
+ README.md
+makefile
+reporting
+reporting/Data_exploration.Rmd
+reporting/Deliverable 4_updated.Rmd
+reporting/Deliverables_updated.Rmd
+reporting/Final_Paper.Rmd
+reporting/Final_complete_analysis.Rmd
+src
+src/analysis
+src/analysis/Makefile
+src/analysis/data_analysis.R
+src/analysis/data_exploration.R
+src/analysis/lm_main_effect.R
+src/data-preparation
+src/data-preparation/clean_data.R
+src/data-preparation/download_data.R
+src/data-preparation/filter_data.R
+src/data-preparation/merge_data.R
+src/data-preparation/setup.R 
+```
