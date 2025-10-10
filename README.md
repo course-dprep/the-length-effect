@@ -52,6 +52,7 @@ Longer films tend to receive slightly higher ratings, but this effect has weaken
 
 ## Repository Overview 
 
+```text
 ├── .RDataTmp
 ├── .gitignore
 ├── README.md
@@ -74,6 +75,7 @@ Longer films tend to receive slightly higher ratings, but this effect has weaken
         ├── filter_data.R
         ├── merge_data.R
         └── setup.R
+```
 
 ## Dependencies 
 
