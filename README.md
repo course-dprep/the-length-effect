@@ -78,8 +78,10 @@ fs::dir_create(paths[grepl("/$", paths)])
 fs::file_create(setdiff(paths, paths[grepl("/$", paths)]))
 
 tree_txt <- fs::dir_tree(
-  path = ".", recurse = 3,
-  regexp = "\\.git|\\.Rproj\\.user|renv|__pycache__|\\.DS_Store|\\.Rhistory|\\.RData|\\.RDataTmp|\\.pdf$",
+  path = ".",
+  recurse = 3,
+  all = TRUE,  # toon dotfiles zoals .gitignore en .RDataTmp
+  regexp = "^\\.git($|/)|^\\.Rproj\\.user($|/)|^renv($|/)|^__pycache__($|/)|\\.DS_Store$|\\.Rhistory$|\\.RData$|\\.pdf$",
   invert = TRUE
 )
 
@@ -87,6 +89,7 @@ if (!file.exists("README.md")) fs::file_create("README.md")
 cat("\n## Repository Overview\n\n```text\n",
     paste(tree_txt, collapse = "\n"),
     "\n```\n", file = "README.md", append = TRUE)
+
 
 ## Dependencies 
 
@@ -169,6 +172,116 @@ Zhang, H. (2025). Analysis of business factors influencing film revenue. Advance
 
 ```text
  README.md
+makefile
+reporting
+reporting/Data_exploration.Rmd
+reporting/Deliverable 4_updated.Rmd
+reporting/Deliverables_updated.Rmd
+reporting/Final_Paper.Rmd
+reporting/Final_complete_analysis.Rmd
+src
+src/analysis
+src/analysis/Makefile
+src/analysis/data_analysis.R
+src/analysis/data_exploration.R
+src/analysis/lm_main_effect.R
+src/data-preparation
+src/data-preparation/clean_data.R
+src/data-preparation/download_data.R
+src/data-preparation/filter_data.R
+src/data-preparation/merge_data.R
+src/data-preparation/setup.R 
+```
+
+## Repository Overview
+
+```text
+ .RDataTmp
+.gitignore
+README.md
+makefile
+reporting
+reporting/Data_exploration.Rmd
+reporting/Deliverable 4_updated.Rmd
+reporting/Deliverables_updated.Rmd
+reporting/Final_Paper.Rmd
+reporting/Final_complete_analysis.Rmd
+src
+src/analysis
+src/analysis/Makefile
+src/analysis/data_analysis.R
+src/analysis/data_exploration.R
+src/analysis/lm_main_effect.R
+src/data-preparation
+src/data-preparation/clean_data.R
+src/data-preparation/download_data.R
+src/data-preparation/filter_data.R
+src/data-preparation/merge_data.R
+src/data-preparation/setup.R 
+```
+<!-- TREE-START -->
+## Repository Overview
+
+```text
+.RDataTmp
+.gitignore
+README.md
+makefile
+reporting
+reporting/Data_exploration.Rmd
+reporting/Deliverable 4_updated.Rmd
+reporting/Deliverables_updated.Rmd
+reporting/Final_Paper.Rmd
+reporting/Final_complete_analysis.Rmd
+src
+src/analysis
+src/analysis/Makefile
+src/analysis/data_analysis.R
+src/analysis/data_exploration.R
+src/analysis/lm_main_effect.R
+src/data-preparation
+src/data-preparation/clean_data.R
+src/data-preparation/download_data.R
+src/data-preparation/filter_data.R
+src/data-preparation/merge_data.R
+src/data-preparation/setup.R
+```
+
+<!-- TREE-END -->
+
+## Repository Overview
+
+```text
+ .RDataTmp
+.gitignore
+README.md
+makefile
+reporting
+reporting/Data_exploration.Rmd
+reporting/Deliverable 4_updated.Rmd
+reporting/Deliverables_updated.Rmd
+reporting/Final_Paper.Rmd
+reporting/Final_complete_analysis.Rmd
+src
+src/analysis
+src/analysis/Makefile
+src/analysis/data_analysis.R
+src/analysis/data_exploration.R
+src/analysis/lm_main_effect.R
+src/data-preparation
+src/data-preparation/clean_data.R
+src/data-preparation/download_data.R
+src/data-preparation/filter_data.R
+src/data-preparation/merge_data.R
+src/data-preparation/setup.R 
+```
+
+## Repository Overview
+
+```text
+ .RDataTmp
+.gitignore
+README.md
 makefile
 reporting
 reporting/Data_exploration.Rmd
