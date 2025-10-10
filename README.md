@@ -42,13 +42,13 @@ As the final step, we visualised and compared the predicted values and fitted li
 
 ## Preview of Findings 
 *Gist of your findings* 
-In the interaction model (average_rating ~ runtime_minutes * start_year), the runtime_minutes coefficient is 0.2475 (SE = 0.0070, p < 0.001) and the runtime_minutes × start_year coefficient is −0.0001231 (SE = 0.0000035, p < 0.001), indicating a positive association that weakens with later release years; start_year is 0.01310 (SE = 0.0003211, p < 0.001). Model fit: adjusted R² = 0.006543, N = 345,656, F-statistic = 759.8, p < 2.2e-16.
+In the interaction model, runtime has a small but significant positive effect on IMDb ratings (b = 0.2475, p < .001), while the negative interaction with release year (b = –0.00012, p < .001) indicates that this relationship weakens for more recent films. The quadratic specification confirms a slight nonlinearity: very short and very long films tend to receive higher ratings, though the overall explanatory power remains modest (adjusted R² ≈ 0.017).
 
 *How our findings/product are deployed:*
-After cleaning the dataset we used the regression outputs to predict and visualize how runtime relates to audience reception, including plots of observed vs. fitted relationships and predicted ratings by runtime. This analysis can be replicated or extended by adding variables such as genre or budget, and the visualizations can be used directly by specialists and academics in reports and presentations.
+After cleaning and merging the dataset, we used regression outputs to visualize how runtime relates to audience ratings, controlling for release year. These visualizations can be extended with additional predictors such as genre or budget.
 
 *Relevance of the findings/product:*
-Overall, the results show that longer runtimes are associated with slightly higher ratings, but the negative interaction with release year suggests the relationship is smaller for more recent films. Given the modest explanatory power and potential genre-specific dynamics not accounted for here, runtime should be viewed as one of several structural factors affecting audience satisfaction.
+Longer films tend to receive slightly higher ratings, but this effect has weakened in recent years. This may indicate changing viewer habits and possibly less tolerance for longer film lengths.
 
 ## Repository Overview 
 
@@ -65,25 +65,16 @@ Please follow the installation guides on <http://tilburgsciencehub.com/>.
 
     ```text
     install.packages("data.table")
-    install.packages("tidyverse")
-    install.packages("readr")
-    install.packages("lubridate")
     install.packages("knitr")
     install.packages("kableExtra")
     install.packages("broom")
     install.packages("gt")
-    install.packages("ISOweek")
-    install.packages("zoo")
-    install.packages("janitor")
     install.packages("ggplot2")
-    install.packages("dplyr")
+    install.packages("dplyr")i w
     install.packages("tidyr")
     install.packages("tibble")
-    install.packages("checkmate")
     install.packages("modelsummary")
     install.packages("sandwich")
-    install.packages("lmtest")
-    install.packages("ggeffects")
     ```
     
 
