@@ -52,7 +52,41 @@ Longer films tend to receive slightly higher ratings, but this effect has weaken
 
 ## Repository Overview 
 
-**Include a tree diagram that illustrates the repository structure*
+if (!requireNamespace("fs", quietly = TRUE)) install.packages("fs")
+
+paths <- c(
+  "reporting/", "src/", ".gitignore", "README.md", "makefile", ".RDataTmp",
+  "reporting/Data_exploration.Rmd",
+  "reporting/Deliverable 4_updated.Rmd",
+  "reporting/Deliverables_updated.Rmd",
+  "reporting/Final_Paper.Rmd",
+  "reporting/Final_complete_analysis.Rmd",
+  "reporting/Data_Exploration_Report.pdf",
+  "src/analysis/", "src/data-preparation/",
+  "src/analysis/Makefile",
+  "src/analysis/data_analysis.R",
+  "src/analysis/data_exploration.R",
+  "src/analysis/lm_main_effect.R",
+  "src/data-preparation/clean_data.R",
+  "src/data-preparation/download_data.R",
+  "src/data-preparation/filter_data.R",
+  "src/data-preparation/merge_data.R",
+  "src/data-preparation/setup.R"
+)
+
+fs::dir_create(paths[grepl("/$", paths)])
+fs::file_create(setdiff(paths, paths[grepl("/$", paths)]))
+
+tree_txt <- fs::dir_tree(
+  path = ".", recurse = 3,
+  regexp = "\\.git|\\.Rproj\\.user|renv|__pycache__|\\.DS_Store|\\.Rhistory|\\.RData|\\.RDataTmp|\\.pdf$",
+  invert = TRUE
+)
+
+if (!file.exists("README.md")) fs::file_create("README.md")
+cat("\n## Repository Overview\n\n```text\n",
+    paste(tree_txt, collapse = "\n"),
+    "\n```\n", file = "README.md", append = TRUE)
 
 ## Dependencies 
 
