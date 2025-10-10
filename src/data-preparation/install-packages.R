@@ -1,7 +1,7 @@
 #instal packages
 need_pkgs <- c(
   "tidyverse","data.table","readr","lubridate",
-  "knitr","kableExtra","broom"
+  "knitr","kableExtra","broom", "ggeffects"
 )
 
 # Optional (used only if you later add those features)
