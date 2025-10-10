@@ -14,8 +14,7 @@ Given that rating behaviour and audience preferences evolve over time (Amendola 
 **To what extent does movie duration influence audience ratings, controlling for release year?**
 
 ## Data
-In this study, we use publicly available IMDb datasets: title.basics, containing metadata about movie titles (including release year and duration), and title.ratings, containing aggregate user ratings. The datasets are retrieved in TSV format from the IMDb website and merged using tconst. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year).
-After merging, cleaning, and deduplicating, the datasets consist of 345,656 observations. This reduction reflects filtering and merging steps: missing values were removed, films with unrealistic durations (shorter than 40 minutes or longer than 300 minutes) were excluded, and duplicates were resolved by keeping the title with the highest number of votes.
+In this study, we use publicly available IMDb datasets: title.basics, containing metadata about movie titles (including release year and duration), and title.ratings, containing aggregate user ratings. The datasets are retrieved in TSV format from the IMDb website and merged using tconst. From the original set of variables, we focus on three that are relevant to our research question: movie duration (runtime_minutes), IMDb user rating (average_rating), and release year (start_year). After cleaning, merging and deduplicating, the datasets consist of 345,777 observations. This reduction reflects filtering and merging steps: films with unrealistic durations (shorter than 40 minutes or longer than 300 minutes) were excluded, and 77 duplicates were resolved by keeping the title with the highest number of votes. The decision to include only movies longer than 40 minutes follows the AFI (American Film Institute) standards, which classify such works as feature films (Urbanora, 2010).
 
 Table 1: Variable Explanation  
 
@@ -116,5 +115,3 @@ The project is implemented by team 4, consisting of the following members:
 - [Jekaterina Rakute](https://github.com/raakute), e-mail: [j.rakute@tilburguniversity.edu](mailto:j.rakute@tilburguniversity.edu) 
 - [Simona Borisova](https://github.com/borisova-simona), e-mail: [s.borisova@tilburguniversity.edu](mailto:s.borisova@tilburguniversity.edu)
 - [Thomas van den Dungen](https://github.com/ThomasvandenDungen), e-mail: [t.e.n.vdndungen@tilburguniversity.edu](mailto:t.e.n.vdndungen@tilburguniversity.edu)
-
-
