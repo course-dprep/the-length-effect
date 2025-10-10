@@ -1,4 +1,9 @@
-SHELL := /usr/bin/sh
+ifeq ($(OS),Windows_NT)
+  SHELL := /usr/bin/sh    # Git Bash / RTools on Windows
+else
+  SHELL := /bin/sh        # macOS/Linux
+endif
+
 ROOT  ?= .
 DP	:= $(ROOT)/src/data-preparation
 AN	:= $(ROOT)/src/analysis
@@ -14,10 +19,10 @@ PAPER	:= $(ROOT)/paper/output
 all: analysis  
 
 data-preparation:  ## Run data-preparation pipeline
-	"$(MAKE)" -C $(DP)
+	$(MAKE) -C $(DP)
 
 analysis: data-preparation  ## Run analysis after data-prep
-	"$(MAKE)" -C $(AN)
+	$(MAKE) -C $(AN)
 	
 clean:
 	R -e "unlink('DATA',  recursive=TRUE, force=TRUE)"

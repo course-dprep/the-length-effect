@@ -1,4 +1,9 @@
-SHELL := /usr/bin/sh
+ifeq ($(OS),Windows_NT)
+  SHELL := /usr/bin/sh    # Git Bash / RTools on Windows
+else
+  SHELL := /bin/sh        # macOS/Linux
+endif
+
 ROOT  ?= ../..
 DATA := ../../data
 TEMP := ../../gen/temp
